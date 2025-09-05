@@ -1,66 +1,556 @@
-// =======================
-// Matrix background effect with numbers
-// =======================
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --dark-blue: #0a192f;
+            --navy: #112240;
+            --light-navy: #233554;
+            --lightest-navy: #303C55;
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --accent: #64ffda;
+            --white: #e6f1ff;
+        }
+        
+        body {
+            background-color: var(--dark-blue);
+            color: var(--light-slate);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Matrix Background */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 30px 0;
+            position: relative;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--lightest-slate);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+        }
+        
+        .hero-content h1 {
+            font-size: 60px;
+            color: var(--white);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        .hero-content h1 span {
+            color: var(--accent);
+        }
+        
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: var(--slate);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: transparent;
+            color: var(--accent);
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(100, 255, 218, 0.1);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        .btn:hover::before {
+            left: 0;
+        }
+        
+        .btn-primary {
+            background: rgba(100, 255, 218, 0.1);
+            border-color: var(--accent);
+        }
+        
+        /* Social Links */
+        .social-links {
+            position: fixed;
+            left: 30px;
+            bottom: 0;
+            z-index: 100;
+        }
+        
+        .social-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .social-links a {
+            color: var(--light-slate);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .social-line {
+            width: 1px;
+            height: 100px;
+            background-color: var(--light-slate);
+            margin-top: 20px;
+        }
+        
+        /* Projects Section */
+        #projects {
+            padding: 100px 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            color: var(--white);
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .project-card {
+            background: var(--navy);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-title {
+            font-size: 22px;
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+        
+        .project-description {
+            color: var(--slate);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .project-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--accent);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent);
+        }
+        
+        .project-link:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--slate);
+            font-size: 14px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 40px;
+            }
+            
+            .hero-content p {
+                font-size: 18px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .social-links {
+                position: relative;
+                left: 0;
+                margin-top: 40px;
+            }
+            
+            .social-links ul {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .social-line {
+                display: none;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: bounce 1.5s infinite;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Background Canvas -->
+    <canvas id="matrix-bg"></canvas>
 
-// Set canvas size
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">CyberPortfolio</div>
+                <ul class="nav-links">
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#" id="resume-btn">Resume</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-const numbers = "0123456789";   // numbers only
-const fontSize = 16;
-const columns = canvas.width / fontSize; // number of columns
-const drops = [];
+    <!-- Social Links -->
+    <div class="social-links">
+        <ul>
+            <li><a href="#" title="GitHub"><i class="fab fa-github"></i></a></li>
+            <li><a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#" title="Personal Website"><i class="fas fa-globe"></i></a></li>
+            <li><div class="social-line"></div></li>
+        </ul>
+    </div>
 
-// Initialize drops
-for (let i = 0; i < columns; i++) {
-  drops[i] = 1;
-}
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Welcome! I'm <span>Alex Morgan</span>,</h1>
+                <h1>a Social Analyst in Cybersecurity.</h1>
+                <p>I specialize in threat intelligence, social engineering defense, and security awareness training.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#" class="btn" id="resume-btn-2">View Resume</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-function draw() {
-  // Black background with slight opacity for trail effect
-  ctx.fillStyle = "rgba(10, 25, 47, 0.08)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid" id="projects-container">
+                <div class="loading">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  ctx.fillStyle = "#64ffda"; // neon green/teal numbers
-  ctx.font = fontSize + "px monospace";
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Designed and built by Alex Morgan • Cybersecurity Analyst</p>
+            <p>© 2023 All rights reserved</p>
+        </div>
+    </footer>
 
-  for (let i = 0; i < drops.length; i++) {
-    const text = numbers.charAt(Math.floor(Math.random() * numbers.length));
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
-    }
-
-    drops[i]++;
-  }
-}
-
-setInterval(draw, 40);
-
-// =======================
-// Project Markdown Loader
-// =======================
-
-// List of markdown files
-const projectFiles = [
-  "projects/project1.md",
-  "projects/project2.md",
-  "projects/project3.md"
-];
-
-const projectsDiv = document.getElementById("projects");
-
-projectFiles.forEach(file => {
-  fetch(file)
-    .then(res => res.text())
-    .then(text => {
-      // Create a card for each project
-      const card = document.createElement("div");
-      card.className = "project-card";
-      card.innerHTML = marked.parse(text);
-      projectsDiv.appendChild(card);
-    });
-});
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <script>
+        // Matrix background effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const characters = '01010101010101010101010101010101';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#64ffda';
+            ctx.font = `${fontSize}px monospace`;
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 33);
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Resume button functionality
+        document.getElementById('resume-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('In a real implementation, this would open your resume.');
+        });
+        
+        document.getElementById('resume-btn-2').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('In a real implementation, this would open your resume.');
+        });
+        
+        // Sample project data (in a real implementation, this would be loaded from Markdown files)
+        const projects = [
+            {
+                title: "Phishing Awareness Training",
+                description: "Developed and implemented a comprehensive phishing awareness training program for a Fortune 500 company, reducing successful phishing attacks by 75%.",
+                github: "https://github.com/username/project1",
+                link: "#"
+            },
+            {
+                title: "Social Media Threat Monitoring",
+                description: "Created a system to monitor social media platforms for potential security threats and social engineering attempts targeting company employees.",
+                github: "https://github.com/username/project2",
+                link: "#"
+            },
+            {
+                title: "Security Awareness Dashboard",
+                description: "Designed and built an interactive dashboard to track security awareness training progress and measure program effectiveness.",
+                github: "https://github.com/username/project3",
+                link: "#"
+            }
+        ];
+        
+        // Generate 50 projects
+        for (let i = 4; i <= 50; i++) {
+            projects.push({
+                title: `Project ${i}`,
+                description: `This is a description for Project ${i}. It demonstrates my skills in cybersecurity and social analysis.`,
+                github: `https://github.com/username/project${i}`,
+                link: "#"
+            });
+        }
+        
+        // Render projects
+        function renderProjects() {
+            const container = document.getElementById('projects-container');
+            container.innerHTML = '';
+            
+            projects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                
+                projectCard.innerHTML = `
+                    <div class="project-content">
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-links">
+                            <a href="${project.github}" target="_blank" class="project-link">GitHub</a>
+                            <a href="${project.link}" class="project-link">View Project</a>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(projectCard);
+            });
+        }
+        
+        // Simulate loading delay for projects
+        setTimeout(renderProjects, 1500);
+    </script>
+</body>
+</html>
