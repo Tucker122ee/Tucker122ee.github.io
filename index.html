@@ -164,6 +164,7 @@
             display: flex;
             gap: 20px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -270,6 +271,7 @@
         .card-links {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
         }
         
         .card-link {
@@ -400,6 +402,13 @@
             border-top: 1px solid var(--light-navy);
             font-style: italic;
             color: var(--accent);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            font-size: 12px;
         }
         
         /* Responsive Design */
@@ -430,6 +439,10 @@
             
             .footer-content {
                 grid-template-columns: 1fr;
+            }
+            
+            .card-links {
+                flex-direction: column;
             }
         }
         
@@ -466,6 +479,39 @@
                 transform: translateY(-15px);
             }
         }
+        
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--navy);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -477,6 +523,9 @@
         <div class="container">
             <nav>
                 <div class="logo">Duncan M Kahindi</div>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <ul class="nav-links">
                     <li><a href="#hero" class="nav-link active" data-section="hero">Home</a></li>
                     <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
@@ -493,11 +542,12 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Welcome! I'm <span>Duncan M Kahindi</span>,</h1>
-                <h1>SOC Analyst defending the internet.</h1>
+                <h1>a SOC Analyst protecting businesses from cyber threats so they can grow with confidence.</h1>
                 <p>Specializing in threat detection, incident response, and cybersecurity defense strategies.</p>
                 <div class="hero-buttons">
                     <a href="#projects" class="btn btn-primary view-projects">View My Projects</a>
-                    <a href="#contact" class="btn get-in-touch">Get In Touch</a>
+                    <a href="mailto:duncanmaganga10@gmail.com" class="btn get-in-touch">Get In Touch</a>
+                    <a href="https://medium.com/@duncanmaganga10" target="_blank" class="btn">Blog</a>
                 </div>
             </div>
         </div>
@@ -616,8 +666,11 @@
             </div>
             
             <div class="footer-caption">
-                <p>Defending the internet, one threat at a time.</p>
-                <p>All rights reserved to Duncan Maganga for page production.</p>
+                <p>YOU DESERVE THE BEST SECURITY</p>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 Duncan M Kahindi. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -666,6 +719,14 @@
             canvas.height = window.innerHeight;
         });
         
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
         // Navigation functionality
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -673,6 +734,9 @@
                 
                 if (this.getAttribute('data-section')) {
                     e.preventDefault();
+                    
+                    // Close mobile menu if open
+                    navLinks.classList.remove('active');
                     
                     // Update active nav link
                     document.querySelectorAll('.nav-link').forEach(navLink => {
@@ -713,46 +777,31 @@
             window.scrollTo(0, 0);
         });
         
-        document.querySelector('.get-in-touch').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Update active nav link
-            document.querySelectorAll('.nav-link').forEach(navLink => {
-                navLink.classList.remove('active');
-            });
-            document.querySelector('[data-section="contact"]').classList.add('active');
-            
-            // Show the contact section
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById('contact').classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        });
-        
         // Sample project data
         const projects = [
             {
                 title: "Phishing Simulation with GoPhish",
                 description: "A comprehensive phishing simulation campaign using GoPhish to test and improve security awareness.",
-                github: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish"
+                github: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish",
+                portfolio: "#"
             },
             {
                 title: "Web Application Vulnerability Assessment",
                 description: "Detailed assessment report identifying security vulnerabilities in web applications.",
-                github: "https://github.com/Duncan-Maganga/FUTURE_CS_001"
+                github: "https://github.com/Duncan-Maganga/FUTURE_CS_001",
+                portfolio: "#"
             },
             {
                 title: "Incident Response Simulation",
                 description: "Full incident response simulation report for a hypothetical security breach scenario.",
-                github: "https://github.com/Duncan-Maganga/FUTURE_CS_02"
+                github: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
+                portfolio: "#"
             },
             {
                 title: "Secure File Sharing System",
                 description: "A secure system for sharing sensitive files with encryption and access controls.",
-                github: "https://github.com/Duncan-Maganga/FUTURE_CS_003"
+                github: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
+                portfolio: "#"
             }
         ];
         
@@ -761,7 +810,8 @@
             projects.push({
                 title: `Project ${i}`,
                 description: `This is a description for Project ${i}. It demonstrates my skills in cybersecurity and SOC operations.`,
-                github: `https://github.com/Duncan-Maganga/project${i}`
+                github: `https://github.com/Duncan-Maganga/project${i}`,
+                portfolio: "#"
             });
         }
         
@@ -770,17 +820,20 @@
             {
                 title: "Understanding SMB",
                 description: "Comprehensive guide to Server Message Block protocol, its vulnerabilities, and security considerations.",
-                github: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters"
+                github: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
+                portfolio: "#"
             },
             {
                 title: "Suricata Lab Demo",
                 description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
-                github: "https://github.com/Duncan-Maganga/Suricata"
+                github: "https://github.com/Duncan-Maganga/Suricata",
+                portfolio: "#"
             },
             {
                 title: "Network Traffic Analysis",
                 description: "Guide to analyzing network traffic for security incidents and threat detection.",
-                github: "https://github.com/Duncan-Maganga/network-traffic-analysis"
+                github: "https://github.com/Duncan-Maganga/network-traffic-analysis",
+                portfolio: "#"
             }
         ];
         
@@ -789,7 +842,8 @@
             writeups.push({
                 title: `Writeup ${i}`,
                 description: `This is a description for Writeup ${i}. It documents my approach to solving a cybersecurity challenge.`,
-                github: `https://github.com/Duncan-Maganga/writeup${i}`
+                github: `https://github.com/Duncan-Maganga/writeup${i}`,
+                portfolio: "#"
             });
         }
         
@@ -808,6 +862,7 @@
                         <p class="card-description">${project.description}</p>
                         <div class="card-links">
                             <a href="${project.github}" target="_blank" class="card-link">View on GitHub</a>
+                            <a href="${project.portfolio}" class="card-link">Open in Portfolio</a>
                         </div>
                     </div>
                 `;
@@ -830,7 +885,8 @@
                         <h3 class="card-title">${writeup.title}</h3>
                         <p class="card-description">${writeup.description}</p>
                         <div class="card-links">
-                            <a href="${writeup.github}" target="_blank" class="card-link">Read Writeup</a>
+                            <a href="${writeup.github}" target="_blank" class="card-link">View on GitHub</a>
+                            <a href="${writeup.portfolio}" class="card-link">Read in Portfolio</a>
                         </div>
                     </div>
                 `;
