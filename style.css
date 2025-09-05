@@ -1,96 +1,34 @@
-/* Reset & Layout */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #ccd6f6;
-  background: linear-gradient(270deg, #0a192f, #112240, #0a192f);
-  background-size: 600% 600%;
-  animation: gradientShift 15s ease infinite;
-  overflow-x: hidden;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 32px 20px 60px;
-  position: relative;
-  z-index: 1; /* Keep content above matrix background */
-}
-
-/* Heading with neon glow */
-h1 {
-  text-align: center;
-  font-size: 2.6rem;
-  margin: 10px 0 30px;
-  color: #64ffda;
-  text-shadow: 0 0 10px #64ffda, 0 0 20px #64ffda, 0 0 40px #0ff;
-}
-
-/* Projects grid + cards */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-@media (min-width: 720px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.project {
+/* Clean Markdown project cards */
+.project-card {
   background: #112240;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  margin: 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform .18s ease, box-shadow .18s ease;
 }
 
-.project:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
 }
 
-.project h2 {
-  margin: 0 0 8px;
-  color: #64ffda;
-  font-size: 1.2rem;
+.project-card h1,
+.project-card h2,
+.project-card h3 {
+  color: #ccd6f6; /* normal text color, not neon */
+  margin-top: 0;
 }
 
-.project p {
-  margin: 0 0 10px;
+.project-card p {
   color: #a8b2d1;
 }
 
-.project a {
-  color: #8892b0;
+.project-card a {
+  color: #64ffda; /* subtle teal for links */
   text-decoration: none;
 }
 
-.project a:hover {
-  color: #64ffda;
+.project-card a:hover {
   text-decoration: underline;
-}
-
-/* Full-screen background canvas */
-#matrix {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;           /* behind content */
-  background: #0a192f;   /* base navy if canvas is blank */
 }
