@@ -1,27 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="dark" />
-  <title>Duncan • Portfolio</title>
+// =======================
+// Matrix background effect with numbers
+// =======================
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
+// Set canvas size
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
-  <!-- JS (deferred so HTML is parsed first) -->
-  <script src="index.js" defer></script>
-</head>
-<body>
-  <!-- matrix background -->
-  <canvas id="matrix"></canvas>
+const numbers = "0123456789";   // numbers only
+const fontSize = 16;
+const columns = canvas.width / fontSize; // number of columns
+const drops = [];
 
-  <main class="wrapper">
-    <h1>My Projects</h1>
-     <p style="text-align:center;">
-    <a href="resume.html" style="color:#64ffda; text-decoration:none;">📄 View My Resume</a>
-  </p>
-    <div id="projects" class="grid"></div>
-  </main>
-</body>
-</html>
+// Initialize drops
+for (let i = 0; i < columns; i++) {
+  drops[i] = 1;
+}
+
+function draw() {
+  // Black background with slight opacity for trail effect
+  ctx.fillStyle = "rgba(10, 25, 47, 0.08)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#64ffda"; // neon green/teal numbers
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = numbers.charAt(Math.floor(Math.random() * numbers.length));
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 40);
+
+// =======================
+// Project Markdown Loader
+// =======================
+
+// List of markdown files
+const projectFiles = [
+  "projects/project1.md",
+  "projects/project2.md",
+  "projects/project3.md"
+];
+
+const projectsDiv = document.getElementById("projects");
+
+projectFiles.forEach(file => {
+  fetch(file)
+    .then(res => res.text())
+    .then(text => {
+      // Create a card for each project
+      const card = document.createElement("div");
+      card.className = "project-card";
+      card.innerHTML = marked.parse(text);
+      projectsDiv.appendChild(card);
+    });
+});
