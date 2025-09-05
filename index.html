@@ -155,7 +155,7 @@
         }
         
         .hero-content p {
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 40px;
             color: var(--slate);
         }
@@ -512,6 +512,60 @@
                 transform: translateY(0);
             }
         }
+        
+        /* Markdown Content Styles */
+        .markdown-content {
+            background: var(--navy);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .markdown-content h1, 
+        .markdown-content h2, 
+        .markdown-content h3 {
+            color: var(--white);
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .markdown-content p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .markdown-content code {
+            background: var(--light-navy);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .markdown-content pre {
+            background: var(--light-navy);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+        
+        .markdown-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .markdown-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-button {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -542,8 +596,7 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Welcome! I'm <span>Duncan M Kahindi</span>,</h1>
-                <h1>a SOC Analyst protecting businesses from cyber threats so they can grow with confidence.</h1>
-                <p>Specializing in threat detection, incident response, and cybersecurity defense strategies.</p>
+                <p>a social analyst. I protect businesses from cyber threats so they can focus on growing with confidence.</p>
                 <div class="hero-buttons">
                     <a href="#projects" class="btn btn-primary view-projects">View My Projects</a>
                     <a href="mailto:duncanmaganga10@gmail.com" class="btn get-in-touch">Get In Touch</a>
@@ -567,6 +620,14 @@
         </div>
     </section>
 
+    <!-- Project Detail Section (hidden by default) -->
+    <section id="project-detail">
+        <div class="container">
+            <a href="#" class="btn back-button" id="back-to-projects">← Back to Projects</a>
+            <div id="project-detail-content"></div>
+        </div>
+    </section>
+
     <!-- Writeups Section -->
     <section id="writeups">
         <div class="container">
@@ -578,6 +639,14 @@
                     <div class="dot"></div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Writeup Detail Section (hidden by default) -->
+    <section id="writeup-detail">
+        <div class="container">
+            <a href="#" class="btn back-button" id="back-to-writeups">← Back to Writeups</a>
+            <div id="writeup-detail-content"></div>
         </div>
     </section>
 
@@ -777,31 +846,140 @@
             window.scrollTo(0, 0);
         });
         
+        // Back button functionality
+        document.getElementById('back-to-projects').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('projects').classList.add('active');
+        });
+        
+        document.getElementById('back-to-writeups').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('writeups').classList.add('active');
+        });
+        
         // Sample project data
         const projects = [
             {
                 title: "Phishing Simulation with GoPhish",
                 description: "A comprehensive phishing simulation campaign using GoPhish to test and improve security awareness.",
                 github: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish",
-                portfolio: "#"
+                markdown: `
+# Phishing Simulation with GoPhish
+
+## Overview
+This project demonstrates a comprehensive phishing simulation campaign using GoPhish to test and improve security awareness within organizations.
+
+## Features
+- Custom phishing email templates
+- Landing page cloning
+- Detailed reporting and analytics
+- Employee training integration
+
+## Technologies Used
+- GoPhish
+- HTML/CSS
+- JavaScript
+- SMTP services
+
+## Results
+The simulation helped reduce successful phishing attacks by 75% in the tested organization.
+                `
             },
             {
                 title: "Web Application Vulnerability Assessment",
                 description: "Detailed assessment report identifying security vulnerabilities in web applications.",
                 github: "https://github.com/Duncan-Maganga/FUTURE_CS_001",
-                portfolio: "#"
+                markdown: `
+# Web Application Vulnerability Assessment
+
+## Overview
+A comprehensive security assessment of web applications to identify and mitigate potential vulnerabilities.
+
+## Methodology
+- Automated scanning with OWASP ZAP and Burp Suite
+- Manual penetration testing
+- Code review
+- Configuration analysis
+
+## Key Findings
+- SQL injection vulnerabilities
+- Cross-site scripting (XSS) issues
+- Authentication bypass possibilities
+- insecure direct object references
+
+## Recommendations
+- Implement input validation
+- Use parameterized queries
+- Add proper authentication checks
+- Regular security training for developers
+                `
             },
             {
                 title: "Incident Response Simulation",
                 description: "Full incident response simulation report for a hypothetical security breach scenario.",
                 github: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
-                portfolio: "#"
+                markdown: `
+# Incident Response Simulation
+
+## Scenario
+A simulated ransomware attack on a corporate network to test incident response capabilities.
+
+## Objectives
+- Test detection capabilities
+- Evaluate response procedures
+- Identify gaps in security controls
+- Improve team coordination
+
+## Steps Taken
+1. Initial detection through SIEM alerts
+2. Isolation of affected systems
+3. Evidence collection and preservation
+4. Threat analysis and identification
+5. Eradication and recovery
+6. Post-incident review
+
+## Lessons Learned
+- Need for better endpoint detection
+- Improved communication protocols
+- Regular backup verification needed
+- Enhanced employee training required
+                `
             },
             {
                 title: "Secure File Sharing System",
                 description: "A secure system for sharing sensitive files with encryption and access controls.",
                 github: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
-                portfolio: "#"
+                markdown: `
+# Secure File Sharing System
+
+## Overview
+A secure platform for sharing sensitive files with end-to-end encryption and strict access controls.
+
+## Features
+- AES-256 encryption for files at rest and in transit
+- Role-based access control
+- Expiring download links
+- Audit trails and access logs
+- Two-factor authentication
+
+## Architecture
+- Frontend: React.js
+- Backend: Node.js with Express
+- Database: MongoDB with encryption
+- Storage: Encrypted AWS S3 buckets
+
+## Security Measures
+- Regular security audits
+- Penetration testing
+- Compliance with GDPR and HIPAA
+- Automated vulnerability scanning
+                `
             }
         ];
         
@@ -811,7 +989,7 @@
                 title: `Project ${i}`,
                 description: `This is a description for Project ${i}. It demonstrates my skills in cybersecurity and SOC operations.`,
                 github: `https://github.com/Duncan-Maganga/project${i}`,
-                portfolio: "#"
+                markdown: `# Project ${i}\n\n## Description\nThis is a detailed description of Project ${i} and its cybersecurity implications.\n\n## Technologies Used\n- Security tooling\n- Programming languages\n- Frameworks\n\n## Key Findings\n- Security issue 1\n- Security issue 2\n- Recommendations`
             });
         }
         
@@ -821,19 +999,95 @@
                 title: "Understanding SMB",
                 description: "Comprehensive guide to Server Message Block protocol, its vulnerabilities, and security considerations.",
                 github: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
-                portfolio: "#"
+                markdown: `
+# Understanding SMB Protocol
+
+## What is SMB?
+Server Message Block (SMB) is a network protocol used for providing shared access to files, printers, and serial ports between nodes on a network.
+
+## Security Concerns
+- SMBv1 has known vulnerabilities (EternalBlue)
+- Often exposed to the internet unnecessarily
+- Weak configurations can lead to unauthorized access
+
+## Hardening Recommendations
+- Disable SMBv1 if not needed
+- Implement SMB signing
+- Use strong authentication mechanisms
+- Restrict access through firewalls
+
+## Detection Techniques
+- Network traffic analysis
+- Log monitoring for authentication attempts
+- Regular vulnerability scanning
+                `
             },
             {
                 title: "Suricata Lab Demo",
                 description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
                 github: "https://github.com/Duncan-Maganga/Suricata",
-                portfolio: "#"
+                markdown: `
+# Suricata IDS/IPS Lab Demonstration
+
+## Overview
+This writeup details the setup and testing of Suricata as an Intrusion Detection and Prevention System.
+
+## Lab Setup
+- Virtualized environment with multiple VMs
+- Network segmentation for testing
+- Various attack simulations
+
+## Rules Development
+- Custom rule creation for specific threats
+- Tuning to reduce false positives
+- Performance optimization techniques
+
+## Testing Scenarios
+- Network scanning detection
+- Malware callback identification
+- Data exfiltration attempts
+- Protocol anomaly detection
+
+## Results
+- Successfully detected 95% of test attacks
+- Minimal performance impact on network
+- Low false positive rate after tuning
+                `
             },
             {
                 title: "Network Traffic Analysis",
                 description: "Guide to analyzing network traffic for security incidents and threat detection.",
                 github: "https://github.com/Duncan-Maganga/network-traffic-analysis",
-                portfolio: "#"
+                markdown: `
+# Network Traffic Analysis for Security
+
+## Introduction
+Network traffic analysis is a crucial skill for identifying security incidents and threats.
+
+## Key Techniques
+- Protocol analysis
+- Flow data examination
+- Packet capture inspection
+- Behavioral analysis
+
+## Tools Used
+- Wireshark for deep packet inspection
+- Zeek for protocol analysis
+- Elastic Stack for log correlation
+- Custom scripts for specific needs
+
+## Case Studies
+- Data exfiltration detection
+- C2 communication identification
+- Lateral movement tracking
+- DDoS attack analysis
+
+## Best Practices
+- Establish baselines for normal traffic
+- Implement continuous monitoring
+- Use threat intelligence to enrich data
+- Automate where possible to scale efforts
+                `
             }
         ];
         
@@ -843,7 +1097,7 @@
                 title: `Writeup ${i}`,
                 description: `This is a description for Writeup ${i}. It documents my approach to solving a cybersecurity challenge.`,
                 github: `https://github.com/Duncan-Maganga/writeup${i}`,
-                portfolio: "#"
+                markdown: `# Writeup ${i}\n\n## Challenge Overview\nDescription of the cybersecurity challenge addressed in this writeup.\n\n## Methodology\n- Approach taken\n- Tools used\n- Techniques applied\n\n## Findings\n- Key discoveries\n- Security issues identified\n- Recommendations\n\n## Lessons Learned\n- Skills developed\n- Insights gained\n- Future improvements`
             });
         }
         
@@ -852,7 +1106,7 @@
             const container = document.getElementById('projects-container');
             container.innerHTML = '';
             
-            projects.forEach(project => {
+            projects.forEach((project, index) => {
                 const projectCard = document.createElement('div');
                 projectCard.className = 'content-card';
                 
@@ -861,13 +1115,22 @@
                         <h3 class="card-title">${project.title}</h3>
                         <p class="card-description">${project.description}</p>
                         <div class="card-links">
-                            <a href="${project.github}" target="_blank" class="card-link">View on GitHub</a>
-                            <a href="${project.portfolio}" class="card-link">Open in Portfolio</a>
+                            <a href="${project.github}" target="_blank" class="card-link">Git</a>
+                            <a href="#" class="card-link view-markdown" data-index="${index}" data-type="project">View</a>
                         </div>
                     </div>
                 `;
                 
                 container.appendChild(projectCard);
+            });
+            
+            // Add event listeners for markdown viewing
+            document.querySelectorAll('.view-markdown[data-type="project"]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const index = this.getAttribute('data-index');
+                    showMarkdownContent(projects[index], 'project');
+                });
             });
         }
         
@@ -876,7 +1139,7 @@
             const container = document.getElementById('writeups-container');
             container.innerHTML = '';
             
-            writeups.forEach(writeup => {
+            writeups.forEach((writeup, index) => {
                 const writeupCard = document.createElement('div');
                 writeupCard.className = 'content-card';
                 
@@ -885,14 +1148,42 @@
                         <h3 class="card-title">${writeup.title}</h3>
                         <p class="card-description">${writeup.description}</p>
                         <div class="card-links">
-                            <a href="${writeup.github}" target="_blank" class="card-link">View on GitHub</a>
-                            <a href="${writeup.portfolio}" class="card-link">Read in Portfolio</a>
+                            <a href="${writeup.github}" target="_blank" class="card-link">Git</a>
+                            <a href="#" class="card-link view-markdown" data-index="${index}" data-type="writeup">View</a>
                         </div>
                     </div>
                 `;
                 
                 container.appendChild(writeupCard);
             });
+            
+            // Add event listeners for markdown viewing
+            document.querySelectorAll('.view-markdown[data-type="writeup"]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const index = this.getAttribute('data-index');
+                    showMarkdownContent(writeups[index], 'writeup');
+                });
+            });
+        }
+        
+        // Show markdown content
+        function showMarkdownContent(item, type) {
+            const htmlContent = marked.parse(item.markdown);
+            
+            if (type === 'project') {
+                document.getElementById('project-detail-content').innerHTML = htmlContent;
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById('project-detail').classList.add('active');
+            } else {
+                document.getElementById('writeup-detail-content').innerHTML = htmlContent;
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById('writeup-detail').classList.add('active');
+            }
         }
         
         // Simulate loading delay for projects and writeups
