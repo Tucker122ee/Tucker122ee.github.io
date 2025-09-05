@@ -33,6 +33,7 @@
             color: var(--light-slate);
             line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
         .container {
@@ -86,22 +87,6 @@
             font-size: 24px;
             font-weight: 700;
             color: var(--accent);
-        }
-        
-        .hacked-banner {
-            background: var(--accent);
-            color: var(--dark-blue);
-            padding: 5px 15px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 14px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
         }
         
         .nav-links {
@@ -484,7 +469,7 @@
     </style>
 </head>
 <body>
-    <!-- Matrix Background Canvas (Landing Page Only) -->
+    <!-- Matrix Background Canvas -->
     <canvas id="matrix-bg"></canvas>
 
     <!-- Header -->
@@ -492,7 +477,6 @@
         <div class="container">
             <nav>
                 <div class="logo">Duncan M Kahindi</div>
-                <div class="hacked-banner">Your Hacked!</div>
                 <ul class="nav-links">
                     <li><a href="#hero" class="nav-link active" data-section="hero">Home</a></li>
                     <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
@@ -512,8 +496,8 @@
                 <h1>SOC Analyst defending the internet.</h1>
                 <p>Specializing in threat detection, incident response, and cybersecurity defense strategies.</p>
                 <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View My Projects</a>
-                    <a href="#contact" class="btn">Get In Touch</a>
+                    <a href="#projects" class="btn btn-primary view-projects">View My Projects</a>
+                    <a href="#contact" class="btn get-in-touch">Get In Touch</a>
                 </div>
             </div>
         </div>
@@ -552,7 +536,8 @@
         <div class="container">
             <h2 class="section-title">Get In Touch</h2>
             <div class="contact-info">
-                <p>Reach me at my direct email, I am always online and ready to discuss how to defend the internet: <strong>duncanmaganga10@gmail.com</strong></p>
+                <p>I am always online and ready to discuss how to defend the internet.</p>
+                <p>Reach me at my direct email: <strong>duncanmaganga10@gmail.com</strong></p>
             </div>
             
             <div class="social-grid">
@@ -562,7 +547,7 @@
                     </div>
                     <div class="social-text">
                         <h3>LinkedIn</h3>
-                        <a href="https://www.linkedin.com/in/duncanmaganga/" target="_blank">linkedin.com/in/duncanmaganga</a>
+                        <a href="https://www.linkedin.com/in/duncanmaganga/" target="_blank">Connect with me</a>
                     </div>
                 </div>
                 
@@ -572,7 +557,7 @@
                     </div>
                     <div class="social-text">
                         <h3>Twitter</h3>
-                        <a href="https://x.com/iamMaganga" target="_blank">@iamMaganga</a>
+                        <a href="https://x.com/iamMaganga" target="_blank">Follow me</a>
                     </div>
                 </div>
                 
@@ -582,7 +567,7 @@
                     </div>
                     <div class="social-text">
                         <h3>GitHub</h3>
-                        <a href="https://github.com/Duncan-Maganga" target="_blank">github.com/Duncan-Maganga</a>
+                        <a href="https://github.com/Duncan-Maganga" target="_blank">View my work</a>
                     </div>
                 </div>
                 
@@ -592,9 +577,13 @@
                     </div>
                     <div class="social-text">
                         <h3>Medium</h3>
-                        <a href="https://medium.com/@duncanmaganga10" target="_blank">medium.com/@duncanmaganga10</a>
+                        <a href="https://medium.com/@duncanmaganga10" target="_blank">Read my blog</a>
                     </div>
                 </div>
+            </div>
+            
+            <div class="contact-action" style="text-align: center; margin-top: 40px;">
+                <a href="mailto:duncanmaganga10@gmail.com" class="btn btn-primary">Send Email</a>
             </div>
         </div>
     </section>
@@ -627,13 +616,14 @@
             </div>
             
             <div class="footer-caption">
-                <p>Defending the internet, one SOC alert at a time.</p>
+                <p>Defending the internet, one threat at a time.</p>
+                <p>All rights reserved to Duncan Maganga for page production.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Matrix background effect (only on landing page)
+        // Matrix background effect
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
         
@@ -650,24 +640,21 @@
         }
         
         function drawMatrix() {
-            // Only draw matrix if we're on the hero section
-            if (document.getElementById('hero').classList.contains('active')) {
-                ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#64ffda';
+            ctx.font = `${fontSize}px monospace`;
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 
-                ctx.fillStyle = '#64ffda';
-                ctx.font = `${fontSize}px monospace`;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    
-                    drops[i]++;
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
                 }
+                
+                drops[i]++;
             }
         }
         
@@ -706,57 +693,94 @@
             });
         });
         
-        // Sample project data (in a real implementation, this would be loaded from Markdown files)
+        // Handle button clicks
+        document.querySelector('.view-projects').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(navLink => {
+                navLink.classList.remove('active');
+            });
+            document.querySelector('[data-section="projects"]').classList.add('active');
+            
+            // Show the projects section
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('projects').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        });
+        
+        document.querySelector('.get-in-touch').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(navLink => {
+                navLink.classList.remove('active');
+            });
+            document.querySelector('[data-section="contact"]').classList.add('active');
+            
+            // Show the contact section
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('contact').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        });
+        
+        // Sample project data
         const projects = [
             {
-                title: "Phishing Awareness Training",
-                description: "Developed and implemented a comprehensive phishing awareness training program for a Fortune 500 company, reducing successful phishing attacks by 75%.",
-                github: "https://github.com/Duncan-Maganga/phishing-awareness",
-                link: "#"
+                title: "Phishing Simulation with GoPhish",
+                description: "A comprehensive phishing simulation campaign using GoPhish to test and improve security awareness.",
+                github: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish"
             },
             {
-                title: "SOC Automation Scripts",
-                description: "Created a collection of Python scripts to automate common SOC tasks, reducing response time by 40%.",
-                github: "https://github.com/Duncan-Maganga/soc-automation",
-                link: "#"
+                title: "Web Application Vulnerability Assessment",
+                description: "Detailed assessment report identifying security vulnerabilities in web applications.",
+                github: "https://github.com/Duncan-Maganga/FUTURE_CS_001"
             },
             {
-                title: "Threat Intelligence Dashboard",
-                description: "Built a real-time threat intelligence dashboard aggregating data from multiple sources for improved situational awareness.",
-                github: "https://github.com/Duncan-Maganga/threat-dashboard",
-                link: "#"
+                title: "Incident Response Simulation",
+                description: "Full incident response simulation report for a hypothetical security breach scenario.",
+                github: "https://github.com/Duncan-Maganga/FUTURE_CS_02"
+            },
+            {
+                title: "Secure File Sharing System",
+                description: "A secure system for sharing sensitive files with encryption and access controls.",
+                github: "https://github.com/Duncan-Maganga/FUTURE_CS_003"
             }
         ];
         
         // Generate 50 projects
-        for (let i = 4; i <= 50; i++) {
+        for (let i = 5; i <= 50; i++) {
             projects.push({
                 title: `Project ${i}`,
                 description: `This is a description for Project ${i}. It demonstrates my skills in cybersecurity and SOC operations.`,
-                github: `https://github.com/Duncan-Maganga/project${i}`,
-                link: "#"
+                github: `https://github.com/Duncan-Maganga/project${i}`
             });
         }
         
         // Sample writeup data
         const writeups = [
             {
-                title: "HTB: Blue Writeup",
-                description: "A detailed walkthrough of HackTheBox Blue machine, focusing on EternalBlue vulnerability exploitation.",
-                github: "https://github.com/Duncan-Maganga/htb-blue-writeup",
-                link: "#"
+                title: "Understanding SMB",
+                description: "Comprehensive guide to Server Message Block protocol, its vulnerabilities, and security considerations.",
+                github: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters"
             },
             {
-                title: "CTF: Basic Pentesting",
-                description: "Writeup for a beginner-friendly CTF challenge covering basic penetration testing techniques.",
-                github: "https://github.com/Duncan-Maganga/ctf-basic-pentest",
-                link: "#"
+                title: "Suricata Lab Demo",
+                description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
+                github: "https://github.com/Duncan-Maganga/Suricata"
             },
             {
-                title: "HTB: Lame Writeup",
-                description: "Complete walkthrough of HackTheBox Lame machine, focusing on Samba vulnerability exploitation.",
-                github: "https://github.com/Duncan-Maganga/htb-lame-writeup",
-                link: "#"
+                title: "Network Traffic Analysis",
+                description: "Guide to analyzing network traffic for security incidents and threat detection.",
+                github: "https://github.com/Duncan-Maganga/network-traffic-analysis"
             }
         ];
         
@@ -765,8 +789,7 @@
             writeups.push({
                 title: `Writeup ${i}`,
                 description: `This is a description for Writeup ${i}. It documents my approach to solving a cybersecurity challenge.`,
-                github: `https://github.com/Duncan-Maganga/writeup${i}`,
-                link: "#"
+                github: `https://github.com/Duncan-Maganga/writeup${i}`
             });
         }
         
@@ -784,8 +807,7 @@
                         <h3 class="card-title">${project.title}</h3>
                         <p class="card-description">${project.description}</p>
                         <div class="card-links">
-                            <a href="${project.github}" target="_blank" class="card-link">GitHub</a>
-                            <a href="${project.link}" class="card-link">View Details</a>
+                            <a href="${project.github}" target="_blank" class="card-link">View on GitHub</a>
                         </div>
                     </div>
                 `;
@@ -808,8 +830,7 @@
                         <h3 class="card-title">${writeup.title}</h3>
                         <p class="card-description">${writeup.description}</p>
                         <div class="card-links">
-                            <a href="${writeup.github}" target="_blank" class="card-link">GitHub</a>
-                            <a href="${writeup.link}" class="card-link">Read Writeup</a>
+                            <a href="${writeup.github}" target="_blank" class="card-link">Read Writeup</a>
                         </div>
                     </div>
                 `;
