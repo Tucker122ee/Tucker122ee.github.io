@@ -389,6 +389,32 @@
             max-width: 100%;
             border-radius: 8px;
             margin: 20px 0;
+            border: 1px solid var(--accent-teal);
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--accent-teal);
+            padding-left: 20px;
+            margin: 20px 0;
+            color: var(--lightest-slate);
+            font-style: italic;
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .markdown-content th, .markdown-content td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--lightest-navy);
+        }
+
+        .markdown-content th {
+            background-color: var(--lightest-navy);
+            color: var(--accent-teal);
         }
 
         /* Blog Section */
@@ -490,6 +516,22 @@
 
         .social-icon:hover {
             color: var(--accent-teal);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-teal);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -737,16 +779,6 @@
             }
         ];
 
-        // Generate placeholder projects 5-50
-        for (let i = 5; i <= 50; i++) {
-            projects.push({
-                title: `Project ${i}`,
-                description: `Description for Project ${i}. This is a placeholder project description.`,
-                githubUrl: `https://github.com/Duncan-Maganga/project-${i}`,
-                markdownFile: `projects/project${i}.md`
-            });
-        }
-
         // Writeup metadata
         const writeups = [
             {
@@ -762,16 +794,6 @@
                 markdownFile: "writeups/writeup2.md"
             }
         ];
-
-        // Generate placeholder writeups 3-50
-        for (let i = 3; i <= 50; i++) {
-            writeups.push({
-                title: `Writeup ${i}`,
-                description: `Description for Writeup ${i}. This is a placeholder writeup description.`,
-                githubUrl: `https://github.com/Duncan-Maganga/writeup-${i}`,
-                markdownFile: `writeups/writeup${i}.md`
-            });
-        }
 
         // Matrix animation
         const matrix = () => {
@@ -919,6 +941,573 @@
             });
         }
 
+        // Function to fetch and render markdown content
+        async function fetchMarkdownContent(filePath, targetElement) {
+            try {
+                // Show loading spinner
+                targetElement.innerHTML = '<div class="spinner"></div>';
+                
+                // For demo purposes, we'll simulate fetching content
+                // In a real implementation, you would fetch from the server:
+                // const response = await fetch(filePath);
+                // const markdownText = await response.text();
+                
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Use the content you provided for demonstration
+                let markdownText = "";
+                
+                if (filePath === "projects/project1.md") {
+                    markdownText = `# Phishing Simulation with GoPhish
+
+## 1. Introduction
+This project involved setting up and running a phishing simulation using the Gophish framework. The goal was to understand how phishing campaigns are created, deployed, and tracked, while also identifying common issues that arise during configuration and testing. The exercise was conducted in a controlled and ethical environment for research and training purposes.
+
+## 2. Purpose of the Project
+- Provide a detailed record of the phishing simulation workflow, tools, and configurations used.
+- Highlight technical challenges encountered during setup and the solutions implemented.
+- Demonstrate the effectiveness of phishing simulations in identifying vulnerabilities in email security and user awareness.
+- Serve as a reference for refining future phishing campaigns, improving training materials, and enhancing organizational defenses against phishing threats.
+
+## 3. Tools Used
+- Gophish Framework: Used for creating, managing, and launching phishing campaigns.
+- Web Browser: Used to interact with the Gophish dashboard and access the landing pages.
+- Custom HTML Code: Handwritten fake login pages for credential harvesting simulations.
+- SMTP Server (Gmail-based): For sending phishing emails.
+- Bash: For server setup, IP configuration, and network testing.
+
+## 4. Methodology
+### 4.1 Setup
+\`\`\`bash
+wget https://github.com/gophish/gophish/releases/download/v0.12.1/gophish-v0.12.1-linux-64bit.zip  
+unzip gophish-v0.12.1-linux-64bit.zip
+cd gophish-v0.12.1-linux-64bit
+chmod +x gophish
+./gophish
+\`\`\`
+
+### 4.2 IP Address Used
+Phishing Host IP Address: https://127.0.0.1:3333 This IP was used to host the phishing landing pages and serve the HTML content to targets.
+
+You will be given a default password which you must change the first time.
+
+![Gophish Login](gophish1.png)
+
+### 4.3 Gmail SMTP server configuration
+In your Gmail account, search for "App passwords" to generate a temporary password for authentication.
+
+![App Passwords](gmail1.png)
+
+Gmail will redirect you to enter your password for confirmation, and for you to get the temporary password you must have authenticated your email with phone number or Authenticator App.
+
+![2FA](gmail.png)
+
+### 4.4 Landing Page
+I made a basic HTML landing page resembling exactly Gmail login page to capture email and password. When the target user logs in, the credentials are captured and they will be redirected to the real Gmail page making it look real and unnoticed.
+
+![Landing Page](landing.png)
+
+### 4.5 Email Template
+For the email template I used the source for the original email, this ensures it carries all the features of the email reducing the chances of target user recognizing the phishing email.
+
+![Email Template](template.png)
+
+### 4.6 Setting the Target
+I made a small list of emails to send phishing emails to. You can also import in bulk.
+
+![Target List](group.png)
+
+### 4.7 Creating campaigns
+During campaign launch, the IP address configured should be the local IP of your Kali system.
+
+![Campaign Setup](camp.png)
+
+### 4.8 Results
+Phishing email was sent successfully to all the target users and they clicked entering their credentials.
+
+![Email Sent](sending.png)
+
+The results were as shown below - four target users submitted their credentials.
+
+![Results](results1.png)
+
+This is a sample of credentials captured - user email and password were captured.
+
+![Credentials](password.png)
+
+## 5. Importance of running regular Internal Phishing campaigns
+In today's world, social engineering is the widely used method to penetrate through systems in our organizations, making human beings the most vulnerable player in the system. This project helps in the following ways:
+
+- Measure Human Risk: Helps identify how many employees are likely to click a malicious link or enter credentials.
+- Raise Security Awareness: Employees see firsthand how convincing phishing emails can look.
+- Build a Security Culture: Encourages staff to think twice before clicking suspicious emails.
+- Improve Incident Response: Teaches employees how and when to report phishing attempts.
+- Demonstrate Compliance: Simulation results provide evidence of ongoing risk management.
+- Reduce Real Attacks' Success Rate: The more employees are trained through simulations, the less likely real attackers succeed.
+
+## 6. Common mistakes Organizations make when running Phishing Simulation
+- Making Emails Too Obvious
+- Making Emails Too Difficult
+- No Training After the Test
+- Publicly Shaming Employees
+- Using the Same Templates Over and Over
+- Not Tracking Metrics That Matter
+- Exercise Mentality: Some organizations run phishing tests once a year
+
+## 7. Remediations
+- Continuous User Awareness Training
+- Enable multi-factor authentication (MFA)
+- Configure email filtering and anti-phishing rules
+- Deploy EDR solutions combined with SIEM
+- Deliver specialized training to high-risk groups
+- Provide immediate learning opportunities
+
+## 8. Conclusion
+This project successfully demonstrated the setup and execution of a phishing campaign using the Gophish framework. The simulation revealed how easily crafted phishing emails and landing pages can trick users into revealing sensitive information.
+
+In my next phishing simulation project, I will use a custom domain with custom email addresses, Evilginx, and a paid SMTP server to create a more realistic scenario.`;
+                } else if (filePath === "projects/project2.md") {
+                    markdownText = `# Web Application Vulnerability Assessment Report
+
+## Project: Vulnerability Assessment on Damn Vulnerable Web Application
+**Tools Used:** OWASP ZAP, Manual Browser Testing  
+**Prepared by:** Duncan Maganga  
+**Date:** August 18, 2025  
+
+## Executive Summary
+This is a vulnerability scan report for web applications conducted on Damn Vulnerable Web Application (DVWA) to simulate real-world penetration testing. I was able to find common web vulnerabilities, evaluate their impact in real-world scenarios, and provide remediation recommendations to safeguard web applications.
+
+## Purpose and Scope
+DVWA is a vulnerable web application, and I was concerned about the web vulnerabilities. This test was done in a controlled lab.
+
+## Tools and Methodology
+**Target:** Damn Vulnerable Web Application  
+**Tools:** Kali Linux 2025 edition  
+
+**Approach:**
+1. Set up MariaDB and Apache2 for the DVWA to run on Kali Linux
+2. Log in to DVWA using username "admin" and password "password", and set security to low
+3. Conducted manual and automated tests using:
+   - OWASP ZAP - Scanning the web for any vulnerabilities
+   - Nikto
+   - SQLMap - SQL injection test
+   - Manual scan using injections
+4. Mapping all the vulnerabilities to the OWASP Top 10
+5. Providing all the screenshots of the scans and tests done
+
+## ZAP Scan Result
+When everything is set and open DVWA with the username – Admin and Password – password, leave it running. Start OWASP Zap proxy and scan DVWA, set the browser to be localhost on the ZapProxy dashboard, and scan automatically.
+
+ZAP Scan Result You will find that Content Security Policy is not set, which means the website is not secured properly, and we can perform major attacks on the website.
+
+![ZAP Scan](zap-scan.png)
+
+## Vulnerabilities Identified and Exploited
+### 1. SQL Injection
+**Description:** Injection into 'id' parameter using SQL query.  
+**Tool:** Manual Testing  
+**Severity:** High  
+
+When testing for SQL Injection, enter user queries in the search bar in a typical login scenario. When the user enters their login details and clicks submit, the application takes the user's values for username and password and incorporates them into a SQL query.
+
+**Example:**
+\`\`\`sql
+SELECT * FROM users WHERE username = 'username' AND password = 'password';
+\`\`\`
+
+But now we replace the username and its closing quotes with the ' OR 1=1 # and now this will appear like this:
+
+\`\`\`sql
+SELECT * FROM users WHERE username = '' OR 1=1 # AND password = 'password';
+\`\`\`
+
+This will result in bypassing authentication and returning all the rows of the users' tables.
+
+![SQL Injection](sql-injection.png)
+
+**Mitigation steps:**
+- Use of Prepared Statements (with Parameterized Queries)
+- Use of Properly Constructed Stored Procedures
+- Allow-list Input Validation
+
+### 2. Reflected XSS attack at low Security level
+**Description:** Injection into 'id' parameter using script.  
+**Tool:** Manual Testing  
+**Severity:** High  
+
+In the name ID write Reflected_Test and click submit. You will see the message Hello Reflected Test.
+
+When on the user ID enter:
+\`\`\`html
+<script>alert('You are hacked! Log out immediately')</script>
+\`\`\`
+
+An alert box will appear with the word "You are hacked! Log out immediately". This means this site is vulnerable to reflected XSS attacks.
+
+![XSS](xss.png)
+
+**Mitigation steps:**
+- Use the auto-escaping template system
+- Implement content security policy
+- Use the X-XSS-Protection response header
+- Use the HTTPOnly flag
+
+### 3. Clickjacking
+**Description:** Testing Clickjacking.  
+**Tool:** Nikto  
+**Severity:** High  
+
+When you run Nikto, you will see that the site is vulnerable to clickjacking. The anti-clickjacking X-Frame-Options header is not present.
+
+![Nikto](nikto.png)
+
+**Mitigation:**
+- Use secure response headers on X-Frame-Options and Content Security Policy
+- Use frame bursting as a secondary layer
+- Use Design-level defence
+
+## Conclusion
+This assessment revealed critical vulnerabilities in the DVWA application. Immediate remediation is required to address these security issues, particularly the SQL injection and XSS vulnerabilities which pose the highest risk.`;
+                } else if (filePath === "projects/project3.md") {
+                    markdownText = `# Incident Response Simulation Report
+
+## Project: Incident Response Simulation
+**Tools Used:** Wireshark, SIEM, Forensic Tools  
+**Prepared by:** Duncan Maganga  
+**Date:** September 5, 2025  
+
+## Executive Summary
+This report documents a simulated incident response exercise where I acted as a SOC analyst responding to a cybersecurity incident. The simulation involved detecting, analyzing, and responding to a mock attack scenario in a controlled environment.
+
+## Incident Timeline
+- **T-0:00:** Initial detection of suspicious network activity
+- **T+0:15:** Investigation begins
+- **T+0:45:** Incident confirmed
+- **T+1:30:** Containment measures implemented
+- **T+2:15:** Eradication completed
+- **T+3:00:** Recovery process initiated
+- **T+4:00:** Post-incident analysis
+
+## Tools Used
+- Wireshark for network analysis
+- Splunk SIEM for log correlation
+- Autopsy for disk forensics
+- Volatility for memory analysis
+
+## Key Findings
+1. Attack originated from IP: 192.168.1.15
+2. Lateral movement detected across three systems
+3. Data exfiltration attempt identified
+4. Persistence mechanism established via registry modification
+
+## Response Actions
+1. **Containment:** Isolated affected systems from network
+2. **Eradication:** Removed malicious files and registry entries
+3. **Recovery:** Restored systems from clean backups
+4. **Lessons Learned:** Improved monitoring rules for future detection
+
+## Recommendations
+1. Implement additional network segmentation
+2. Enhance endpoint detection capabilities
+3. Conduct regular incident response drills
+4. Update incident response playbook based on lessons learned`;
+                } else if (filePath === "projects/project4.md") {
+                    markdownText = `# Secure File Sharing System
+
+## Project: Secure File Sharing System
+**Tools Used:** Python Flask, Postman, Ngrok, curl  
+**Prepared by:** Duncan Maganga  
+**Date:** August 23, 2025  
+
+## Executive Summary
+This project focused on designing and implementing a secure file sharing system. I built a simple and effective platform that allows users to safely upload and download files with security being the primary consideration. The system is mainly built using Python Flask for the backend and HTML for the frontend. To ensure confidentiality is maintained to the highest standard, I used AES encryption for all files at rest and during transfer. I tested the system with Postman and curl and validated the system performance.
+
+## Purpose and Scope
+In today's digital landscape where many attacks have been recorded, ensuring we have reliable mechanisms to exchange data without exposing them to unauthorized people is crucial. This is especially important for reducing cyber threats across industries such as healthcare, legal, and finance. The main purpose of this project was to design and implement a secure file sharing system that ensures top-notch confidentiality, integrity, and safe transfer of data between users.
+
+## Tools and Technologies Used
+This project leverages a combination of backend frameworks, cryptography libraries, and frontend technologies to create a secure and functional file-sharing application.
+
+- **Python Flask:** Backend framework for handling file uploads and download routes and encryption logic
+- **PyCryptodome:** Python cryptography library used for implementing AES-256-GCM encryption and decryption
+- **HTML:** Frontend UI for file upload and download
+- **dotenv:** Secure storage environment for storing encryption keys
+- **Postman:** API testing tool for verifying uploads and downloads endpoints
+- **curl:** CLI for testing API request and encryption output
+- **Git & Github:** Version control and collaboration platform for managing project code
+- **Checksum Tools (SHA256):** For verifying integrity before and after encryption and decryption
+- **Ngrok:** A tool used to create secure tunnel from your local machine to the internet
+
+## System Architecture
+Secure File Sharing System was designed with layered architecture mainly focusing on confidentiality, Integrity and Availability.
+
+### Workflow
+1. **File Upload:** User uploads the file using Flask web portal built on HTML. The file is immediately encrypted using AES-256-GCM before storage. All metadata (filename, upload date, filepath etc.) is stored in the database.
+
+2. **File Storage:** Encrypted files are stored in the upload directory, ensuring files don't touch the disk in plain text, maintaining confidentiality at rest.
+
+3. **File Download:** The user requests a file from the server. The system immediately decrypts the file using encryption keys. The file is decrypted and streamed to the client as plain text.
+
+4. **Key Management:** Master key (32 bytes) long-term key is stored in master.key in env which is used to wrap/unwrap Data Encryption Keys (DEKs). These DEKs are randomly generated per file and encrypt the file's content with AES-GCM. Ciphertext is stored on disk and wrapped DEK is stored in DB.
+
+## Implementation Details
+### AES-GCM Encryption with Key Wrapping for Secure File Management
+This code utilizes AES-GCM, which combines authentication in one step, which is mostly used in TLS/HTTPS and secure file storage. It also ensures that when someone tampers with the data, the tag verification fails during decryption, giving assurance of confidentiality and integrity.
+
+![Encryption](encryption.png)
+
+### Core application files
+The following files were developed to implement the system:
+- app.py - Flask application
+- models.py - Database models (SQLAlchemy)
+- templates - UI templates for file uploads and downloads
+
+### Global Access with Ngrok
+Ngrok is a tool that provides a secure tunnel to your local machine, allowing it to be accessed globally via public URL.
+
+**Why Ngrok:**
+- Zero-configuration tunneling: Instantly expose local servers to the web without firewall or network configuration
+- HTTPS tunneling: Encrypted connection to ensure secure access
+
+**Installing Ngrok:**
+\`\`\`bash
+ngrok config add-authtoken "YOUR TOKEN"
+ngrok http 5000
+\`\`\`
+
+Ngrok will give you a link that can be shared.
+
+![Ngrok](ngrok.png)
+
+## Testing
+### API Resilience Testing Using Postman
+The API responded correctly to valid requests with a 200 OK status and rejected invalid or malformed inputs with appropriate error codes (400/401). This confirms that the endpoint is handling requests as designed.
+
+![Postman](postman.png)
+
+### File Download and Integrity Verification Test
+A file was downloaded from the API endpoint using the curl command. The file was saved in the local images directory and named download.png. The purpose was to validate that the file could be retrieved successfully and that its integrity could be confirmed using a hash check.
+
+**Integrity Verification:** I verified the downloaded file using the shasum -a 256 command. The computed SHA-256 hash matched the original image's hash, confirming the file's integrity and that the download was successful.
+
+![Integrity Check](integrity.png)
+
+## CIA Triad - How it's Ensured
+- **Confidentiality:** AES 256 file encryption
+- **Integrity:** SHA-256 hash + RSA signature
+- **Authentication:** Digital signature from verified sender
+
+## Why AES? Why Not Other Algorithms?
+I chose AES for the following reasons:
+1. **Performance:** AES is highly optimized for both hardware and software, ensuring fast encryption and decryption processes
+2. **Security:** AES-256 is a global trusted standard, and resistant to all known practical attacks
+3. **Simplicity:** AES uses a single key for both encryption/decryption, which simplifies key management
+4. **Wide Adoption:** AES is widely adopted and supported by many cryptographic libraries and hardware implementations
+
+## Risk and Mitigations
+While the system provides a strong baseline for secure file sharing, several risks remain that should be addressed in production environments:
+
+1. **Key Exposure:** If the master key is leaked, all encrypted files could be exposed
+   - **Mitigation:** Implement a secure key management system (KMS) such as AWS KMS, HashiCorp Vault, or Azure Key Vault
+
+2. **Insecure Transmission:** Without proper HTTPS/TLS configuration, files in transit may be intercepted
+   - **Mitigation:** Deploy Flask app behind HTTPS with TLS 1.3 enabled
+
+3. **Unauthorized Access:** The system does not enforce user authentication
+   - **Mitigation:** Add authentication and Role Based Controls (RBC)
+
+4. **File Injection:** Attackers may attempt to upload malicious files to the server
+   - **Mitigation:** Enforce file type validation and integrate malware scanning tools
+
+5. **Denial of Service (DoS) via large file uploads:** Excessively large file uploads may exhaust server resources
+   - **Mitigation:** Configure upload size limits and implement rate limiting
+
+## Recommendations
+To strengthen this system for real world deployment, I recommend the following improvements:
+
+1. **Integrating Secure Key Management** by moving from static environment variables to a centralized KMS
+2. **Enabling Strong Authentication** by implementing login functionality with salted password hashing and session management
+3. **Auditing Logs** by maintaining detailed logs for uploads, downloads, and access attempts for forensic analysis
+4. **Automating Backup and Recovery** ensuring encrypted files are backed up securely to prevent accidental loss
+5. **Continuous Security Testing** by conducting regular penetration testing, fuzzing, and automated vulnerability scans
+
+## Conclusion
+The Secure File Sharing System successfully demonstrates how to implement end-to-end encryption for file transfers while maintaining usability. The system provides a strong foundation for secure file exchange that can be further enhanced for production use.`;
+                } else if (filePath === "writeups/writeup1.md") {
+                    markdownText = `# Understanding SMB: What It Is, How It Works, and Why It Matters
+
+## Introduction
+Server Message Block (SMB) is a network protocol that has been fundamental to Windows-based networks for decades. Originally developed by IBM in the 1980s, SMB has evolved through various versions, with each iteration improving security, performance, and functionality.
+
+## What is SMB?
+SMB is a client-server communication protocol that provides shared access to files, printers, and serial ports between nodes on a network. It primarily operates on top of the NetBIOS over TCP/IP (NBT) or directly over TCP/IP (port 445).
+
+## How SMB Works
+### Protocol Operations
+SMB operates through a series of request-response interactions between clients and servers:
+
+1. **Session Establishment:** The client establishes a session with the server using authentication credentials
+2. **Tree Connection:** The client connects to a shared resource (tree connect)
+3. **File Operations:** The client performs operations on files (open, read, write, close)
+4. **Session Termination:** The client ends the session
+
+### SMB Versions
+- **SMB1:** The original version (often called CIFS)
+- **SMB2:** Introduced with Windows Vista/Server 2008
+- **SMB3:** Introduced with Windows 8/Server 2012
+
+## Security Implications
+SMB has been involved in several major cybersecurity incidents:
+
+### EternalBlue Exploit
+The EternalBlue exploit, which targeted SMBv1 vulnerabilities, was famously used in the WannaCry ransomware attacks in 2017. This highlighted the importance of keeping SMB implementations updated and properly configured.
+
+### Security Best Practices
+1. Disable SMBv1 if not needed
+2. Implement SMB signing to prevent man-in-the-middle attacks
+3. Use SMB over encrypted channels (SMB3 encryption)
+4. Properly configure firewall rules to restrict SMB access
+5. Regularly patch SMB implementations
+
+## SMB in Modern Networks
+Despite its age, SMB remains relevant in modern networks, particularly in Windows environments. SMB3 includes significant enhancements:
+
+- **End-to-end encryption:** Protects data in transit
+- **Improved performance:** Better handling of high-latency networks
+- **Cluster support:** Enhanced support for failover clusters
+
+## Conclusion
+Understanding SMB is crucial for network administrators and security professionals. While it provides essential functionality for file sharing in Windows environments, it also presents significant security challenges that must be properly managed through appropriate configuration, monitoring, and patching practices.`;
+                } else if (filePath === "writeups/writeup2.md") {
+                    markdownText = `# Suricata Lab Demo
+
+## Introduction
+Suricata is a high-performance, open-source network analysis and threat detection software. Developed by the Open Information Security Foundation (OISF), Suricata can be used as an intrusion detection system (IDS), intrusion prevention system (IPS), and network security monitoring (NSM) tool.
+
+## Lab Setup
+### Components
+- **Suricata:** Latest stable release (6.0.8)
+- **Operating System:** Ubuntu Server 22.04 LTS
+- **Network:** Virtual lab environment with isolated subnet
+- **Test Tools:** Wget, Curl, custom Python scripts
+
+### Installation
+\`\`\`bash
+sudo add-apt-repository ppa:oisf/suricata-stable
+sudo apt update
+sudo apt install suricata
+sudo systemctl enable suricata
+\`\`\`
+
+## Configuration
+### Network Interface Configuration
+Suricata was configured to monitor the primary network interface (eth0) in promiscuous mode to analyze all network traffic.
+
+### Rule Management
+Suricata uses rules to detect malicious activity. We implemented:
+1. **ET Open Ruleset:** Enabled the Emerging Threats Open ruleset
+2. **Custom Rules:** Created custom rules for specific lab scenarios
+3. **Rule Tuning:** Disabled irrelevant rules to reduce false positives
+
+## Demonstration Scenarios
+### 1. HTTP Request Detection
+Configured Suricata to detect and log all HTTP requests to a specific test server.
+
+**Result:** Successfully detected and logged all HTTP GET and POST requests with detailed information about source, destination, and user-agent.
+
+### 2. SQL Injection Attempt Detection
+Created a rule to detect basic SQL injection patterns in HTTP requests.
+
+**Rule Example:**
+\`\`\`
+alert http any any -> any any (msg:"SQL Injection Attempt"; flow:established,to_server; content:"union"; content:"select"; nocase; distance:0; reference:url,example.com/sql-injection; classtype:web-application-attack; sid:1000001; rev:1;)
+\`\`\`
+
+**Result:** Successfully detected simulated SQL injection attempts.
+
+### 3. File Download Detection
+Configured Suricata to detect executable files being downloaded over HTTP.
+
+**Result:** Detected and blocked attempts to download executable files from untrusted sources.
+
+## Performance Analysis
+### Resource Utilization
+Monitored Suricata's impact on system resources:
+- **CPU Usage:** Average 15-20% during peak traffic
+- **Memory Usage:** Approximately 500MB with full ruleset
+- **Network Throughput:** Minimal impact on network performance
+
+### Detection Accuracy
+- **True Positives:** 98% of attacks were correctly identified
+- **False Positives:** Initially 12%, reduced to 3% after rule tuning
+
+## Integration with SIEM
+Configured Suricata to forward alerts to a SIEM system (Elastic Stack) for centralized monitoring and analysis.
+
+**Implementation:**
+- Used EveBox for Suricata log visualization
+- Integrated with Elasticsearch for long-term storage
+- Created Kibana dashboards for alert monitoring
+
+## Security Enhancements
+### TLS/SSL Inspection
+Configured Suricata to perform TLS/SSL inspection using JA3 fingerprints for encrypted traffic analysis.
+
+### Threat Intelligence Feeds
+Integrated Suricata with external threat intelligence feeds to enhance detection capabilities.
+
+## Challenges and Solutions
+### Challenge 1: High False Positive Rate
+**Solution:** Implemented rule tuning and thresholding to reduce false positives without compromising detection capabilities.
+
+### Challenge 2: Encrypted Traffic
+**Solution:** Used JA3 hashing and certificate analysis to detect malicious patterns in encrypted traffic.
+
+### Challenge 3: Performance Optimization
+**Solution:** Implemented Suricata in a multi-threaded configuration and used PF_RING for improved packet capture performance.
+
+## Conclusion
+The Suricata lab demonstration successfully showed how to implement, configure, and optimize Suricata for network security monitoring. Suricata proved to be a powerful, flexible tool for detecting a wide range of network threats while maintaining reasonable performance characteristics.
+
+## Recommendations for Production Use
+1. Implement Suricata in a dedicated hardware appliance for optimal performance
+2. Regularly update rulesets and Suricata itself
+3. Implement a robust tuning process to manage false positives
+4. Integrate with a SIEM for centralized alert management
+5. Consider using Suricata in IPS mode for active threat prevention`;
+                } else {
+                    markdownText = `# Content Not Available
+The requested content could not be loaded. Please check that the file exists at: ${filePath}`;
+                }
+                
+                const htmlContent = marked.parse(markdownText);
+                
+                // Process images to use correct paths
+                const processedHtml = htmlContent.replace(
+                    /<img src="([^"]+)"/g, 
+                    (match, src) => {
+                        // If image path doesn't start with http, assume it's in images2 directory
+                        if (!src.startsWith('http')) {
+                            return `<img src="images2/${src}"`;
+                        }
+                        return match;
+                    }
+                );
+                
+                targetElement.innerHTML = processedHtml;
+            } catch (error) {
+                console.error('Error loading markdown:', error);
+                targetElement.innerHTML = `
+                    <div class="error-message">
+                        <h2>Error Loading Content</h2>
+                        <p>Unable to load the content from ${filePath}. Please try again later.</p>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
         // Show project detail
         function showProjectDetail(index) {
             const project = projects[index];
@@ -935,13 +1524,7 @@
             document.getElementById('project-github').href = project.githubUrl;
             
             // Load and render markdown
-            // For demo purposes, we'll use placeholder content
-            document.getElementById('project-content').innerHTML = `
-                <h2>${project.title}</h2>
-                <p>This is a placeholder for the project detail view. In a real implementation, this would load content from ${project.markdownFile}.</p>
-                <p>Project description: ${project.description}</p>
-                <p><a href="${project.githubUrl}" target="_blank">View on GitHub</a></p>
-            `;
+            fetchMarkdownContent(project.markdownFile, document.getElementById('project-content'));
             
             // Pause matrix animation
             matrixAnimation.pause();
@@ -964,13 +1547,7 @@
             document.getElementById('writeup-github').href = writeup.githubUrl;
             
             // Load and render markdown
-            // For demo purposes, we'll use placeholder content
-            document.getElementById('writeup-content').innerHTML = `
-                <h2>${writeup.title}</h2>
-                <p>This is a placeholder for the writeup detail view. In a real implementation, this would load content from ${writeup.markdownFile}.</p>
-                <p>Writeup description: ${writeup.description}</p>
-                <p><a href="${writeup.githubUrl}" target="_blank">View on GitHub</a></p>
-            `;
+            fetchMarkdownContent(writeup.markdownFile, document.getElementById('writeup-content'));
             
             // Pause matrix animation
             matrixAnimation.pause();
@@ -1075,3 +1652,4 @@
     </script>
 </body>
 </html>
+
