@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duncan M Kahindi - SOC Analyst</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
@@ -17,7 +17,6 @@
             --dark-navy: #0a192f;
             --navy: #112240;
             --light-navy: #233554;
-            --lightest-navy: #303C55;
             --accent-teal: #64ffda;
             --light-slate: #a8b2d1;
             --lightest-slate: #ccd6f6;
@@ -47,7 +46,6 @@
             opacity: 0.15;
         }
 
-        /* Navigation */
         .navbar {
             position: fixed;
             top: 0;
@@ -125,7 +123,6 @@
             transition: var(--transition);
         }
 
-        /* Main Content */
         main {
             padding-top: 70px;
             min-height: calc(100vh - 200px);
@@ -148,7 +145,6 @@
             display: none;
         }
 
-        /* Home/Hero Section */
         .hero {
             min-height: 90vh;
             display: flex;
@@ -218,7 +214,6 @@
             box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
         }
 
-        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -242,7 +237,6 @@
             margin: 15px auto 0;
         }
 
-        /* Grid Layouts */
         .projects-grid, .writeups-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -250,7 +244,6 @@
             margin-top: 50px;
         }
 
-        /* Cards */
         .card {
             background-color: var(--light-navy);
             border-radius: 8px;
@@ -305,7 +298,6 @@
             background: rgba(100, 255, 218, 0.1);
         }
 
-        /* Detail Views */
         .detail-header {
             display: flex;
             justify-content: space-between;
@@ -391,7 +383,6 @@
             margin: 20px 0;
         }
 
-        /* Blog Section */
         .blog-content {
             text-align: center;
             max-width: 600px;
@@ -420,7 +411,6 @@
             background: rgba(100, 255, 218, 0.1);
         }
 
-        /* Contact Section */
         .contact-content {
             text-align: center;
             max-width: 600px;
@@ -456,7 +446,6 @@
             background: rgba(100, 255, 218, 0.1);
         }
 
-        /* Footer */
         .footer {
             background-color: var(--dark-navy);
             padding: 40px 0;
@@ -492,7 +481,6 @@
             color: var(--accent-teal);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .navbar {
                 padding: 0 20px;
@@ -707,7 +695,6 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // Project metadata
         const projects = [
@@ -807,14 +794,26 @@
                     
                     drops[i]++;
                 }
+                
+                if (matrixAnimationActive) {
+                    requestAnimationFrame(draw);
+                }
             }
             
-            let matrixInterval = setInterval(draw, 33);
+            let matrixAnimationActive = true;
+            requestAnimationFrame(draw);
             
             // Pause/resume functionality
             return {
-                pause: () => clearInterval(matrixInterval),
-                resume: () => matrixInterval = setInterval(draw, 33),
+                pause: () => {
+                    matrixAnimationActive = false;
+                    canvas.style.display = 'none';
+                },
+                resume: () => {
+                    matrixAnimationActive = true;
+                    canvas.style.display = 'block';
+                    requestAnimationFrame(draw);
+                },
                 resize: () => {
                     canvas.width = window.innerWidth;
                     canvas.height = window.innerHeight;
@@ -855,6 +854,13 @@
                     // If on mobile, close hamburger menu
                     document.querySelector('.nav-menu').classList.remove('active');
                     document.querySelector('.hamburger').classList.remove('active');
+                    
+                    // Resume matrix animation for list views, pause for detail views
+                    if (tabName === 'project-detail' || tabName === 'writeup-detail') {
+                        matrixAnimation.pause();
+                    } else {
+                        matrixAnimation.resume();
+                    }
                 });
             });
         }
@@ -945,7 +951,6 @@
             
             // Pause matrix animation
             matrixAnimation.pause();
-            document.getElementById('matrix').style.display = 'none';
         }
 
         // Show writeup detail
@@ -974,7 +979,6 @@
             
             // Pause matrix animation
             matrixAnimation.pause();
-            document.getElementById('matrix').style.display = 'none';
         }
 
         // Back to list views
@@ -986,7 +990,6 @@
                 
                 // Resume matrix animation
                 matrixAnimation.resume();
-                document.getElementById('matrix').style.display = 'block';
             });
             
             // Writeup back button
@@ -996,7 +999,6 @@
                 
                 // Resume matrix animation
                 matrixAnimation.resume();
-                document.getElementById('matrix').style.display = 'block';
             });
         }
 
@@ -1075,6 +1077,3 @@
     </script>
 </body>
 </html>
-
-
-
