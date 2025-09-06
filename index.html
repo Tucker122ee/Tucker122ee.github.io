@@ -4,1193 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duncan M Kahindi - SOC Analyst</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --dark-blue: #0a192f;
-            --navy: #112240;
-            --light-navy: #233554;
-            --lightest-navy: #303C55;
-            --slate: #8892b0;
-            --light-slate: #a8b2d1;
-            --lightest-slate: #ccd6f6;
-            --accent: #64ffda;
-            --white: #e6f1ff;
-            --matrix-green: #00ff41;
-        }
-        
-        body {
-            background-color: var(--dark-blue);
-            color: var(--light-slate);
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        section {
-            padding: 100px 0;
-            min-height: 100vh;
-            display: none;
-        }
-        
-        section.active {
-            display: block;
-        }
-        
-        /* Matrix Background */
-        #matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            opacity: 0.1;
-        }
-        
-        /* Header Styles */
-        header {
-            padding: 20px 0;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(10, 25, 47, 0.9);
-            backdrop-filter: blur(10px);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--lightest-slate);
-            font-weight: 500;
-            transition: color 0.3s ease;
-            font-size: 16px;
-            padding: 10px 0;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-        }
-        
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--accent);
-        }
-        
-        /* Hero Section */
-        #hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            padding-top: 80px;
-        }
-        
-        .hero-content h1 {
-            font-size: 60px;
-            color: var(--white);
-            margin-bottom: 20px;
-            line-height: 1.1;
-        }
-        
-        .hero-content h1 span {
-            color: var(--accent);
-        }
-        
-        .hero-content p {
-            font-size: 18px;
-            margin-bottom: 40px;
-            color: var(--slate);
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            background: transparent;
-            color: var(--accent);
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid var(--accent);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(100, 255, 218, 0.1);
-            transition: all 0.4s ease;
-            z-index: -1;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
-        }
-        
-        .btn:hover::before {
-            left: 0;
-        }
-        
-        .btn-primary {
-            background: rgba(100, 255, 218, 0.1);
-            border-color: var(--accent);
-        }
-        
-        /* Content Sections */
-        .section-title {
-            font-size: 32px;
-            color: var(--white);
-            margin-bottom: 50px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent);
-        }
-        
-        /* Projects & Writeups Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        
-        .content-card {
-            background: var(--navy);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .content-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .card-content {
-            padding: 25px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .card-title {
-            font-size: 22px;
-            color: var(--white);
-            margin-bottom: 15px;
-        }
-        
-        .card-description {
-            color: var(--slate);
-            margin-bottom: 20px;
-            flex-grow: 1;
-        }
-        
-        .card-links {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .card-link {
-            display: inline-block;
-            padding: 8px 16px;
-            background: transparent;
-            color: var(--accent);
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--accent);
-        }
-        
-        .card-link:hover {
-            background: rgba(100, 255, 218, 0.1);
-        }
-        
-        /* Contact Section */
-        .contact-info {
-            background: var(--navy);
-            padding: 40px;
-            border-radius: 8px;
-            margin-bottom: 40px;
-        }
-        
-        .contact-info p {
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .social-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: var(--light-navy);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .social-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--dark-blue);
-            font-size: 20px;
-        }
-        
-        .social-text h3 {
-            color: var(--white);
-            margin-bottom: 5px;
-        }
-        
-        .social-text a {
-            color: var(--slate);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .social-text a:hover {
-            color: var(--accent);
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--navy);
-            padding: 50px 0 20px;
-            text-align: center;
-            color: var(--slate);
-            font-size: 14px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-col h3 {
-            color: var(--white);
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
-        .footer-col p {
-            margin-bottom: 10px;
-        }
-        
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .footer-social a {
-            color: var(--slate);
-            font-size: 20px;
-            transition: color 0.3s ease;
-        }
-        
-        .footer-social a:hover {
-            color: var(--accent);
-        }
-        
-        .footer-caption {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid var(--light-navy);
-            font-style: italic;
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .copyright {
-            margin-top: 20px;
-            font-size: 12px;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 40px;
-            }
-            
-            .hero-content p {
-                font-size: 18px;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-            }
-            
-            .social-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .card-links {
-                flex-direction: column;
-            }
-        }
-        
-        /* Loading Animation */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-        }
-        
-        .dot {
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
-            margin: 0 5px;
-            animation: bounce 1.5s infinite;
-        }
-        
-        .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-        }
-        
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: var(--navy);
-                flex-direction: column;
-                padding: 20px;
-                gap: 15px;
-                transform: translateY(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .nav-links.active {
-                transform: translateY(0);
-            }
-        }
-        
-        /* Markdown Content Styles */
-        .markdown-content {
-            background: var(--navy);
-            padding: 30px;
-            border-radius: 8px;
-            margin-top: 30px;
-        }
-        
-        .markdown-content h1, 
-        .markdown-content h2, 
-        .markdown-content h3 {
-            color: var(--white);
-            margin-top: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .markdown-content p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        
-        .markdown-content code {
-            background: var(--light-navy);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-        
-        .markdown-content pre {
-            background: var(--light-navy);
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin-bottom: 20px;
-        }
-        
-        .markdown-content pre code {
-            background: transparent;
-            padding: 0;
-        }
-        
-        .markdown-content a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-        
-        .markdown-content a:hover {
-            text-decoration: underline;
-        }
-        
-        .back-button {
-            margin-bottom: 20px;
-        }
-    </style>
+    <script defer src="index.js"></script>
 </head>
 <body>
-    <!-- Matrix Background Canvas -->
-    <canvas id="matrix-bg"></canvas>
+    <!-- Matrix Canvas Background -->
+    <canvas id="matrix"></canvas>
 
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">Duncan M Kahindi</div>
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="#hero" class="nav-link active" data-section="hero">Home</a></li>
-                    <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
-                    <li><a href="#writeups" class="nav-link" data-section="writeups">Writeups</a></li>
-                    <li><a href="https://medium.com/@duncanmaganga10" target="_blank" class="nav-link">Blog</a></li>
-                    <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="hero" class="active">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Welcome! I'm <span>Duncan M Kahindi</span>,</h1>
-                <p>a social analyst. I protect businesses from cyber threats so they can focus on growing with confidence.</p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary view-projects">View My Projects</a>
-                    <a href="mailto:duncanmaganga10@gmail.com" class="btn get-in-touch">Get In Touch</a>
-                    <a href="https://medium.com/@duncanmaganga10" target="_blank" class="btn">Blog</a>
-                </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Duncan M Kahindi</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link active" data-tab="home">Home</a></li>
+                <li class="nav-item"><a href="#projects" class="nav-link" data-tab="projects">Projects</a></li>
+                <li class="nav-item"><a href="#writeups" class="nav-link" data-tab="writeups">Writeups</a></li>
+                <li class="nav-item"><a href="#blog" class="nav-link" data-tab="blog">Blog</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link" data-tab="contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <h2 class="section-title">My Projects</h2>
-            <div class="content-grid" id="projects-container">
-                <div class="loading">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Project Detail Section (hidden by default) -->
-    <section id="project-detail">
-        <div class="container">
-            <a href="#" class="btn back-button" id="back-to-projects">← Back to Projects</a>
-            <div id="project-detail-content"></div>
-        </div>
-    </section>
-
-    <!-- Writeups Section -->
-    <section id="writeups">
-        <div class="container">
-            <h2 class="section-title">My Writeups</h2>
-            <div class="content-grid" id="writeups-container">
-                <div class="loading">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Writeup Detail Section (hidden by default) -->
-    <section id="writeup-detail">
-        <div class="container">
-            <a href="#" class="btn back-button" id="back-to-writeups">← Back to Writeups</a>
-            <div id="writeup-detail-content"></div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-info">
-                <p>I am always online and ready to discuss how to defend the internet.</p>
-                <p>Reach me at my direct email: <strong>duncanmaganga10@gmail.com</strong></p>
-            </div>
-            
-            <div class="social-grid">
-                <div class="social-item">
-                    <div class="social-icon">
-                        <i class="fab fa-linkedin-in"></i>
-                    </div>
-                    <div class="social-text">
-                        <h3>LinkedIn</h3>
-                        <a href="https://www.linkedin.com/in/duncanmaganga/" target="_blank">Connect with me</a>
-                    </div>
-                </div>
-                
-                <div class="social-item">
-                    <div class="social-icon">
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                    <div class="social-text">
-                        <h3>Twitter</h3>
-                        <a href="https://x.com/iamMaganga" target="_blank">Follow me</a>
-                    </div>
-                </div>
-                
-                <div class="social-item">
-                    <div class="social-icon">
-                        <i class="fab fa-github"></i>
-                    </div>
-                    <div class="social-text">
-                        <h3>GitHub</h3>
-                        <a href="https://github.com/Duncan-Maganga" target="_blank">View my work</a>
-                    </div>
-                </div>
-                
-                <div class="social-item">
-                    <div class="social-icon">
-                        <i class="fab fa-medium-m"></i>
-                    </div>
-                    <div class="social-text">
-                        <h3>Medium</h3>
-                        <a href="https://medium.com/@duncanmaganga10" target="_blank">Read my blog</a>
+    <!-- Main Content Sections -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="tab-content active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Welcome! I'm Duncan M Kahindi</h1>
+                    <h2>A SOC Analyst protecting businesses from cyber threats so they can grow with confidence.</h2>
+                    <p class="caption">Defending the internet, one threat at a time.</p>
+                    <div class="cta-buttons">
+                        <button class="cta-btn" id="view-projects">View My Projects</button>
+                        <button class="cta-btn" id="get-in-touch">Get in Touch</button>
+                        <button class="cta-btn" id="blog-btn">Blog</button>
                     </div>
                 </div>
             </div>
-            
-            <div class="contact-action" style="text-align: center; margin-top: 40px;">
-                <a href="mailto:duncanmaganga10@gmail.com" class="btn btn-primary">Send Email</a>
+        </section>
+
+        <!-- Projects List Section -->
+        <section id="projects-list" class="tab-content">
+            <div class="container">
+                <h2 class="section-title">My Projects</h2>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Projects will be dynamically inserted here -->
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Project Detail Section -->
+        <section id="project-detail" class="tab-content detail-view">
+            <div class="container">
+                <div class="detail-header">
+                    <button class="back-btn" id="project-back">← Back</button>
+                    <a href="#" class="github-btn" id="project-github" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
+                </div>
+                <div class="markdown-content" id="project-content"></div>
+            </div>
+        </section>
+
+        <!-- Writeups List Section -->
+        <section id="writeups-list" class="tab-content">
+            <div class="container">
+                <h2 class="section-title">My Writeups</h2>
+                <div class="writeups-grid" id="writeups-grid">
+                    <!-- Writeups will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Writeup Detail Section -->
+        <section id="writeup-detail" class="tab-content detail-view">
+            <div class="container">
+                <div class="detail-header">
+                    <button class="back-btn" id="writeup-back">← Back</button>
+                    <a href="#" class="github-btn" id="writeup-github" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
+                </div>
+                <div class="markdown-content" id="writeup-content"></div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section id="blog" class="tab-content">
+            <div class="container">
+                <h2 class="section-title">My Blog</h2>
+                <div class="blog-content">
+                    <p>I regularly write about cybersecurity topics on Medium. Check out my latest articles!</p>
+                    <a href="https://medium.com/@duncanmaganga10" target="_blank" rel="noopener noreferrer" class="medium-btn">Visit My Medium Blog</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="tab-content">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-content">
+                    <p>I am always online and ready to discuss how to defend the internet.</p>
+                    <div class="social-buttons">
+                        <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-btn linkedin">LinkedIn</a>
+                        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-btn twitter">Twitter</a>
+                        <a href="https://github.com/Duncan-Maganga" target="_blank" rel="noopener noreferrer" class="social-btn github">GitHub</a>
+                        <a href="https://medium.com/@duncanmaganga10" target="_blank" rel="noopener noreferrer" class="social-btn medium">Medium</a>
+                    </div>
+                    <button class="cta-btn" id="contact-email">Get in Touch</button>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h3>Location</h3>
-                    <p>Nairobi, Kenya</p>
-                    <p>Remote Cybersecurity Analyst</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Contact</h3>
-                    <p>Email: duncanmaganga10@gmail.com</p>
-                    <p>Available for cybersecurity consulting</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h3>Follow Me</h3>
-                    <div class="footer-social">
-                        <a href="https://www.linkedin.com/in/duncanmaganga/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://x.com/iamMaganga" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://github.com/Duncan-Maganga" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://medium.com/@duncanmaganga10" target="_blank"><i class="fab fa-medium-m"></i></a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-caption">
-                <p>YOU DESERVE THE BEST SECURITY</p>
-            </div>
-            
-            <div class="copyright">
-                <p>© 2023 Duncan M Kahindi. All rights reserved.</p>
+            <p class="footer-text">YOU DESERVE THE BEST SECURITY</p>
+            <p class="copyright">© 2025 Duncan Maganga — All rights reserved</p>
+            <div class="footer-social">
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-icon linkedin">LinkedIn</a>
+                <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-icon twitter">Twitter</a>
+                <a href="https://github.com/Duncan-Maganga" target="_blank" rel="noopener noreferrer" class="social-icon github">GitHub</a>
+                <a href="https://medium.com/@duncanmaganga10" target="_blank" rel="noopener noreferrer" class="social-icon medium">Medium</a>
             </div>
         </div>
     </footer>
-
-    <script>
-        // Matrix background effect
-        const canvas = document.getElementById('matrix-bg');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const characters = '01010101010101010101010101010101';
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        
-        const drops = [];
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
-        
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = '#64ffda';
-            ctx.font = `${fontSize}px monospace`;
-            
-            for (let i = 0; i < drops.length; i++) {
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                
-                drops[i]++;
-            }
-        }
-        
-        setInterval(drawMatrix, 33);
-        
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-        
-        // Mobile menu functionality
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-        
-        // Navigation functionality
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#') return;
-                
-                if (this.getAttribute('data-section')) {
-                    e.preventDefault();
-                    
-                    // Close mobile menu if open
-                    navLinks.classList.remove('active');
-                    
-                    // Update active nav link
-                    document.querySelectorAll('.nav-link').forEach(navLink => {
-                        navLink.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Show the corresponding section
-                    const sectionId = this.getAttribute('data-section');
-                    document.querySelectorAll('section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    document.getElementById(sectionId).classList.add('active');
-                    
-                    // Scroll to top
-                    window.scrollTo(0, 0);
-                }
-            });
-        });
-        
-        // Handle button clicks
-        document.querySelector('.view-projects').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Update active nav link
-            document.querySelectorAll('.nav-link').forEach(navLink => {
-                navLink.classList.remove('active');
-            });
-            document.querySelector('[data-section="projects"]').classList.add('active');
-            
-            // Show the projects section
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById('projects').classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        });
-        
-        // Back button functionality
-        document.getElementById('back-to-projects').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById('projects').classList.add('active');
-        });
-        
-        document.getElementById('back-to-writeups').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById('writeups').classList.add('active');
-        });
-        
-        // Sample project data
-        const projects = [
-            {
-                title: "Phishing Simulation with GoPhish",
-                description: "A comprehensive phishing simulation campaign using GoPhish to test and improve security awareness.",
-                github: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish",
-                markdown: `
-# Phishing Simulation with GoPhish
-
-## Overview
-This project demonstrates a comprehensive phishing simulation campaign using GoPhish to test and improve security awareness within organizations.
-
-## Features
-- Custom phishing email templates
-- Landing page cloning
-- Detailed reporting and analytics
-- Employee training integration
-
-## Technologies Used
-- GoPhish
-- HTML/CSS
-- JavaScript
-- SMTP services
-
-## Results
-The simulation helped reduce successful phishing attacks by 75% in the tested organization.
-                `
-            },
-            {
-                title: "Web Application Vulnerability Assessment",
-                description: "Detailed assessment report identifying security vulnerabilities in web applications.",
-                github: "https://github.com/Duncan-Maganga/FUTURE_CS_001",
-                markdown: `
-# Web Application Vulnerability Assessment
-
-## Overview
-A comprehensive security assessment of web applications to identify and mitigate potential vulnerabilities.
-
-## Methodology
-- Automated scanning with OWASP ZAP and Burp Suite
-- Manual penetration testing
-- Code review
-- Configuration analysis
-
-## Key Findings
-- SQL injection vulnerabilities
-- Cross-site scripting (XSS) issues
-- Authentication bypass possibilities
-- insecure direct object references
-
-## Recommendations
-- Implement input validation
-- Use parameterized queries
-- Add proper authentication checks
-- Regular security training for developers
-                `
-            },
-            {
-                title: "Incident Response Simulation",
-                description: "Full incident response simulation report for a hypothetical security breach scenario.",
-                github: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
-                markdown: `
-# Incident Response Simulation
-
-## Scenario
-A simulated ransomware attack on a corporate network to test incident response capabilities.
-
-## Objectives
-- Test detection capabilities
-- Evaluate response procedures
-- Identify gaps in security controls
-- Improve team coordination
-
-## Steps Taken
-1. Initial detection through SIEM alerts
-2. Isolation of affected systems
-3. Evidence collection and preservation
-4. Threat analysis and identification
-5. Eradication and recovery
-6. Post-incident review
-
-## Lessons Learned
-- Need for better endpoint detection
-- Improved communication protocols
-- Regular backup verification needed
-- Enhanced employee training required
-                `
-            },
-            {
-                title: "Secure File Sharing System",
-                description: "A secure system for sharing sensitive files with encryption and access controls.",
-                github: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
-                markdown: `
-# Secure File Sharing System
-
-## Overview
-A secure platform for sharing sensitive files with end-to-end encryption and strict access controls.
-
-## Features
-- AES-256 encryption for files at rest and in transit
-- Role-based access control
-- Expiring download links
-- Audit trails and access logs
-- Two-factor authentication
-
-## Architecture
-- Frontend: React.js
-- Backend: Node.js with Express
-- Database: MongoDB with encryption
-- Storage: Encrypted AWS S3 buckets
-
-## Security Measures
-- Regular security audits
-- Penetration testing
-- Compliance with GDPR and HIPAA
-- Automated vulnerability scanning
-                `
-            }
-        ];
-        
-        // Generate 50 projects
-        for (let i = 5; i <= 50; i++) {
-            projects.push({
-                title: `Project ${i}`,
-                description: `This is a description for Project ${i}. It demonstrates my skills in cybersecurity and SOC operations.`,
-                github: `https://github.com/Duncan-Maganga/project${i}`,
-                markdown: `# Project ${i}\n\n## Description\nThis is a detailed description of Project ${i} and its cybersecurity implications.\n\n## Technologies Used\n- Security tooling\n- Programming languages\n- Frameworks\n\n## Key Findings\n- Security issue 1\n- Security issue 2\n- Recommendations`
-            });
-        }
-        
-        // Sample writeup data
-        const writeups = [
-            {
-                title: "Understanding SMB",
-                description: "Comprehensive guide to Server Message Block protocol, its vulnerabilities, and security considerations.",
-                github: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
-                markdown: `
-# Understanding SMB Protocol
-
-## What is SMB?
-Server Message Block (SMB) is a network protocol used for providing shared access to files, printers, and serial ports between nodes on a network.
-
-## Security Concerns
-- SMBv1 has known vulnerabilities (EternalBlue)
-- Often exposed to the internet unnecessarily
-- Weak configurations can lead to unauthorized access
-
-## Hardening Recommendations
-- Disable SMBv1 if not needed
-- Implement SMB signing
-- Use strong authentication mechanisms
-- Restrict access through firewalls
-
-## Detection Techniques
-- Network traffic analysis
-- Log monitoring for authentication attempts
-- Regular vulnerability scanning
-                `
-            },
-            {
-                title: "Suricata Lab Demo",
-                description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
-                github: "https://github.com/Duncan-Maganga/Suricata",
-                markdown: `
-# Suricata IDS/IPS Lab Demonstration
-
-## Overview
-This writeup details the setup and testing of Suricata as an Intrusion Detection and Prevention System.
-
-## Lab Setup
-- Virtualized environment with multiple VMs
-- Network segmentation for testing
-- Various attack simulations
-
-## Rules Development
-- Custom rule creation for specific threats
-- Tuning to reduce false positives
-- Performance optimization techniques
-
-## Testing Scenarios
-- Network scanning detection
-- Malware callback identification
-- Data exfiltration attempts
-- Protocol anomaly detection
-
-## Results
-- Successfully detected 95% of test attacks
-- Minimal performance impact on network
-- Low false positive rate after tuning
-                `
-            },
-            {
-                title: "Network Traffic Analysis",
-                description: "Guide to analyzing network traffic for security incidents and threat detection.",
-                github: "https://github.com/Duncan-Maganga/network-traffic-analysis",
-                markdown: `
-# Network Traffic Analysis for Security
-
-## Introduction
-Network traffic analysis is a crucial skill for identifying security incidents and threats.
-
-## Key Techniques
-- Protocol analysis
-- Flow data examination
-- Packet capture inspection
-- Behavioral analysis
-
-## Tools Used
-- Wireshark for deep packet inspection
-- Zeek for protocol analysis
-- Elastic Stack for log correlation
-- Custom scripts for specific needs
-
-## Case Studies
-- Data exfiltration detection
-- C2 communication identification
-- Lateral movement tracking
-- DDoS attack analysis
-
-## Best Practices
-- Establish baselines for normal traffic
-- Implement continuous monitoring
-- Use threat intelligence to enrich data
-- Automate where possible to scale efforts
-                `
-            }
-        ];
-        
-        // Generate 50 writeups
-        for (let i = 4; i <= 50; i++) {
-            writeups.push({
-                title: `Writeup ${i}`,
-                description: `This is a description for Writeup ${i}. It documents my approach to solving a cybersecurity challenge.`,
-                github: `https://github.com/Duncan-Maganga/writeup${i}`,
-                markdown: `# Writeup ${i}\n\n## Challenge Overview\nDescription of the cybersecurity challenge addressed in this writeup.\n\n## Methodology\n- Approach taken\n- Tools used\n- Techniques applied\n\n## Findings\n- Key discoveries\n- Security issues identified\n- Recommendations\n\n## Lessons Learned\n- Skills developed\n- Insights gained\n- Future improvements`
-            });
-        }
-        
-        // Render projects
-        function renderProjects() {
-            const container = document.getElementById('projects-container');
-            container.innerHTML = '';
-            
-            projects.forEach((project, index) => {
-                const projectCard = document.createElement('div');
-                projectCard.className = 'content-card';
-                
-                projectCard.innerHTML = `
-                    <div class="card-content">
-                        <h3 class="card-title">${project.title}</h3>
-                        <p class="card-description">${project.description}</p>
-                        <div class="card-links">
-                            <a href="${project.github}" target="_blank" class="card-link">Git</a>
-                            <a href="#" class="card-link view-markdown" data-index="${index}" data-type="project">View</a>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(projectCard);
-            });
-            
-            // Add event listeners for markdown viewing
-            document.querySelectorAll('.view-markdown[data-type="project"]').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const index = this.getAttribute('data-index');
-                    showMarkdownContent(projects[index], 'project');
-                });
-            });
-        }
-        
-        // Render writeups
-        function renderWriteups() {
-            const container = document.getElementById('writeups-container');
-            container.innerHTML = '';
-            
-            writeups.forEach((writeup, index) => {
-                const writeupCard = document.createElement('div');
-                writeupCard.className = 'content-card';
-                
-                writeupCard.innerHTML = `
-                    <div class="card-content">
-                        <h3 class="card-title">${writeup.title}</h3>
-                        <p class="card-description">${writeup.description}</p>
-                        <div class="card-links">
-                            <a href="${writeup.github}" target="_blank" class="card-link">Git</a>
-                            <a href="#" class="card-link view-markdown" data-index="${index}" data-type="writeup">View</a>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(writeupCard);
-            });
-            
-            // Add event listeners for markdown viewing
-            document.querySelectorAll('.view-markdown[data-type="writeup"]').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const index = this.getAttribute('data-index');
-                    showMarkdownContent(writeups[index], 'writeup');
-                });
-            });
-        }
-        
-        // Show markdown content
-        function showMarkdownContent(item, type) {
-            const htmlContent = marked.parse(item.markdown);
-            
-            if (type === 'project') {
-                document.getElementById('project-detail-content').innerHTML = htmlContent;
-                document.querySelectorAll('section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById('project-detail').classList.add('active');
-            } else {
-                document.getElementById('writeup-detail-content').innerHTML = htmlContent;
-                document.querySelectorAll('section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById('writeup-detail').classList.add('active');
-            }
-        }
-        
-        // Simulate loading delay for projects and writeups
-        setTimeout(() => {
-            renderProjects();
-            renderWriteups();
-        }, 1500);
-    </script>
 </body>
 </html>
