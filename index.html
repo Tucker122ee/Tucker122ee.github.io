@@ -6,7 +6,6 @@
     <title>Duncan M Kahindi - SOC Analyst</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Your existing CSS remains unchanged */
         /* Reset and base styles */
         * {
             margin: 0;
@@ -493,22 +492,6 @@
             color: var(--accent-teal);
         }
 
-        /* Loading spinner */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid var(--accent-teal);
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         /* Responsive Design */
         @media (max-width: 768px) {
             .navbar {
@@ -936,45 +919,6 @@
             });
         }
 
-        // Function to fetch and render markdown content
-        async function fetchMarkdownContent(filePath, targetElement) {
-            try {
-                // Show loading spinner
-                targetElement.innerHTML = '<div class="spinner"></div>';
-                
-                const response = await fetch(filePath);
-                if (!response.ok) {
-                    throw new Error(`Failed to load markdown file: ${response.status} ${response.statusText}`);
-                }
-                
-                const markdownText = await response.text();
-                const htmlContent = marked.parse(markdownText);
-                
-                // Process images to use correct paths
-                const processedHtml = htmlContent.replace(
-                    /<img src="([^"]+)"/g, 
-                    (match, src) => {
-                        // If image path doesn't start with http, assume it's in images2 directory
-                        if (!src.startsWith('http')) {
-                            return `<img src="images2/${src}"`;
-                        }
-                        return match;
-                    }
-                );
-                
-                targetElement.innerHTML = processedHtml;
-            } catch (error) {
-                console.error('Error loading markdown:', error);
-                targetElement.innerHTML = `
-                    <div class="error-message">
-                        <h2>Error Loading Content</h2>
-                        <p>Unable to load the content from ${filePath}. Please try again later.</p>
-                        <p>Error: ${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-
         // Show project detail
         function showProjectDetail(index) {
             const project = projects[index];
@@ -991,7 +935,13 @@
             document.getElementById('project-github').href = project.githubUrl;
             
             // Load and render markdown
-            fetchMarkdownContent(project.markdownFile, document.getElementById('project-content'));
+            // For demo purposes, we'll use placeholder content
+            document.getElementById('project-content').innerHTML = `
+                <h2>${project.title}</h2>
+                <p>This is a placeholder for the project detail view. In a real implementation, this would load content from ${project.markdownFile}.</p>
+                <p>Project description: ${project.description}</p>
+                <p><a href="${project.githubUrl}" target="_blank">View on GitHub</a></p>
+            `;
             
             // Pause matrix animation
             matrixAnimation.pause();
@@ -1014,7 +964,13 @@
             document.getElementById('writeup-github').href = writeup.githubUrl;
             
             // Load and render markdown
-            fetchMarkdownContent(writeup.markdownFile, document.getElementById('writeup-content'));
+            // For demo purposes, we'll use placeholder content
+            document.getElementById('writeup-content').innerHTML = `
+                <h2>${writeup.title}</h2>
+                <p>This is a placeholder for the writeup detail view. In a real implementation, this would load content from ${writeup.markdownFile}.</p>
+                <p>Writeup description: ${writeup.description}</p>
+                <p><a href="${writeup.githubUrl}" target="_blank">View on GitHub</a></p>
+            `;
             
             // Pause matrix animation
             matrixAnimation.pause();
@@ -1090,7 +1046,32 @@
             });
         }
 
-        // Initialize
-
-
-        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize matrix animation
+            window.matrixAnimation = matrix();
+            
+            // Initialize tabs
+            initTabs();
+            
+            // Render project and writeup cards
+            renderProjects();
+            renderWriteups();
+            
+            // Initialize back buttons
+            initBackButtons();
+            
+            // Initialize CTA buttons
+            initCTAs();
+            
+            // Initialize mobile menu
+            initMobileMenu();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                matrixAnimation.resize();
+            });
+        });
+    </script>
+</body>
+</html>
