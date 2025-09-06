@@ -1,30 +1,27 @@
-// Project metadata array
+// script.js
+// Project metadata
 const projects = [
     {
-        id: 1,
         title: "Phishing Simulation with GoPhish",
-        description: "A comprehensive phishing simulation campaign using GoPhish to test employee awareness.",
+        description: "A comprehensive phishing simulation project using GoPhish to test and improve organizational security awareness.",
         githubUrl: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish",
         markdownFile: "projects/project1.md"
     },
     {
-        id: 2,
         title: "Web Application Vulnerability Assessment Report",
-        description: "Detailed assessment of web application vulnerabilities and recommended remediation strategies.",
+        description: "Detailed vulnerability assessment of a web application with findings and remediation recommendations.",
         githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_001",
         markdownFile: "projects/project2.md"
     },
     {
-        id: 3,
         title: "Incident Response Simulation Report",
-        description: "Simulated incident response exercise documenting detection, analysis, and containment procedures.",
+        description: "Simulated incident response exercise documenting detection, analysis, and response procedures.",
         githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
         markdownFile: "projects/project3.md"
     },
     {
-        id: 4,
         title: "Secure File Sharing System",
-        description: "A secure system for sharing sensitive files with encryption and access control.",
+        description: "A secure system for sharing files with encryption and access control mechanisms.",
         githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
         markdownFile: "projects/project4.md"
     }
@@ -33,25 +30,22 @@ const projects = [
 // Generate placeholder projects 5-50
 for (let i = 5; i <= 50; i++) {
     projects.push({
-        id: i,
         title: `Project ${i}`,
-        description: `Description for Project ${i}. This is a placeholder project in cybersecurity.`,
+        description: `Description for Project ${i}. This is a placeholder project description.`,
         githubUrl: `https://github.com/Duncan-Maganga/project-${i}`,
         markdownFile: `projects/project${i}.md`
     });
 }
 
-// Writeup metadata array
+// Writeup metadata
 const writeups = [
     {
-        id: 1,
         title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
-        description: "An in-depth exploration of the Server Message Block protocol and its security implications.",
+        description: "A comprehensive guide to Server Message Block protocol, its functionality, and security implications.",
         githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
         markdownFile: "writeups/writeup1.md"
     },
     {
-        id: 2,
         title: "Suricata Lab Demo",
         description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
         githubUrl: "https://github.com/Duncan-Maganga/Suricata",
@@ -62,307 +56,311 @@ const writeups = [
 // Generate placeholder writeups 3-50
 for (let i = 3; i <= 50; i++) {
     writeups.push({
-        id: i,
         title: `Writeup ${i}`,
-        description: `Description for Writeup ${i}. This is a placeholder cybersecurity writeup.`,
+        description: `Description for Writeup ${i}. This is a placeholder writeup description.`,
         githubUrl: `https://github.com/Duncan-Maganga/writeup-${i}`,
         markdownFile: `writeups/writeup${i}.md`
     });
 }
 
-// Social media links
-const socialLinks = {
-    linkedin: "https://www.linkedin.com/in/duncan-maganga-1b1b3b1b2/",
-    twitter: "https://twitter.com/duncanmaganga",
-    github: "https://github.com/Duncan-Maganga",
-    medium: "https://medium.com/@duncanmaganga10"
+// Matrix animation
+const matrix = () => {
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const letters = '01010101010101010101010101010101';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+        drops[i] = 1;
+    }
+    
+    function draw() {
+        ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#64ffda';
+        ctx.font = `${fontSize}px monospace`;
+        
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            
+            drops[i]++;
+        }
+    }
+    
+    let matrixInterval = setInterval(draw, 33);
+    
+    // Pause/resume functionality
+    return {
+        pause: () => clearInterval(matrixInterval),
+        resume: () => matrixInterval = setInterval(draw, 33),
+        resize: () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Recalculate columns
+            const newColumns = canvas.width / fontSize;
+            for (let i = 0; i < newColumns; i++) {
+                if (!drops[i]) drops[i] = 1;
+            }
+            drops.length = newColumns;
+        }
+    };
 };
 
-// DOM elements
-const matrixCanvas = document.getElementById('matrix');
-const navLinks = document.querySelectorAll('.nav-link');
-const contentSections = document.querySelectorAll('.content-section');
-const projectsGrid = document.getElementById('projects-grid');
-const writeupsGrid = document.getElementById('writeups-grid');
-const markdownContent = document.getElementById('markdown-content');
-const backButton = document.getElementById('back-button');
-const githubButton = document.getElementById('github-button');
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-links');
-const viewProjectsBtn = document.getElementById('view-projects');
-const getInTouchBtn = document.getElementById('get-in-touch');
-const blogBtn = document.getElementById('blog-btn');
-const mediumBtn = document.getElementById('medium-btn');
-const contactBtn = document.getElementById('contact-btn');
-
-// Matrix animation variables
-let matrixCtx = matrixCanvas.getContext('2d');
-matrixCanvas.width = window.innerWidth;
-matrixCanvas.height = window.innerHeight;
-
-let matrixChars = "01010101abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+";
-matrixChars = matrixChars.split("");
-
-const fontSize = 14;
-const columns = matrixCanvas.width / fontSize;
-const drops = [];
-let matrixAnimationId = null;
-
-// Initialize drops
-for (let i = 0; i < columns; i++) {
-    drops[i] = 1;
-}
-
-// Matrix animation
-function drawMatrix() {
-    matrixCtx.fillStyle = "rgba(10, 25, 47, 0.05)";
-    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+// Tab navigation
+function initTabs() {
+    const tabs = document.querySelectorAll('.nav-link');
+    const tabContents = document.querySelectorAll('.tab-content');
     
-    matrixCtx.fillStyle = "#64ffda";
-    matrixCtx.font = fontSize + "px monospace";
-    
-    for (let i = 0; i < drops.length; i++) {
-        const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
-        matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-        
-        if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-            drops[i] = 0;
-        }
-        
-        drops[i]++;
-    }
-    
-    matrixAnimationId = requestAnimationFrame(drawMatrix);
-}
-
-// Start matrix animation
-function startMatrix() {
-    if (!matrixAnimationId) {
-        matrixCanvas.style.display = 'block';
-        drawMatrix();
-    }
-}
-
-// Stop matrix animation
-function stopMatrix() {
-    if (matrixAnimationId) {
-        cancelAnimationFrame(matrixAnimationId);
-        matrixAnimationId = null;
-        matrixCanvas.style.display = 'none';
-    }
-}
-
-// Navigation functions
-function switchSection(sectionId) {
-    contentSections.forEach(section => {
-        section.classList.remove('active');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Remove active class from all tabs and contents
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            tab.classList.add('active');
+            
+            // Show corresponding content
+            const tabName = tab.getAttribute('data-tab');
+            const contentElement = document.getElementById(tabName);
+            if (contentElement) {
+                contentElement.classList.add('active');
+            }
+            
+            // If on mobile, close hamburger menu
+            document.querySelector('.nav-menu').classList.remove('active');
+            document.querySelector('.hamburger').classList.remove('active');
+        });
     });
-    
-    document.getElementById(sectionId).classList.add('active');
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('data-target') === sectionId) {
-            link.classList.add('active');
-        }
-    });
-    
-    // Show matrix on list pages, hide on detail view
-    if (sectionId === 'detail-view') {
-        stopMatrix();
-    } else {
-        startMatrix();
-    }
-    
-    // Close mobile menu if open
-    if (navMenu.classList.contains('active')) {
-        navMenu.classList.remove('active');
-    }
 }
 
 // Render project cards
 function renderProjects() {
+    const projectsGrid = document.getElementById('projects-grid');
     projectsGrid.innerHTML = '';
     
-    projects.forEach(project => {
-        const projectCard = document.createElement('div');
-        projectCard.className = 'project-card';
-        projectCard.innerHTML = `
-            <h3>${project.title}</h3>
-            <p>${project.description}</p>
-            <div class="card-actions">
-                <button class="btn btn-primary git-btn" data-url="${project.githubUrl}">Git</button>
-                <button class="btn btn-secondary view-btn" data-file="${project.markdownFile}" data-url="${project.githubUrl}">View</button>
+    projects.forEach((project, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-content">
+                <h3 class="card-title">${project.title}</h3>
+                <p class="card-description">${project.description}</p>
+                <div class="card-buttons">
+                    <a href="${project.githubUrl}" class="card-btn" target="_blank" rel="noopener noreferrer">Git</a>
+                    <button class="card-btn view-project" data-index="${index}">View</button>
+                </div>
             </div>
         `;
-        projectsGrid.appendChild(projectCard);
+        projectsGrid.appendChild(card);
     });
     
-    // Add event listeners to the new buttons
-    document.querySelectorAll('.git-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            window.open(btn.getAttribute('data-url'), '_blank', 'noopener,noreferrer');
-        });
-    });
-    
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            loadMarkdown(btn.getAttribute('data-file'), btn.getAttribute('data-url'));
+    // Add event listeners to view buttons
+    document.querySelectorAll('.view-project').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const index = e.target.getAttribute('data-index');
+            showProjectDetail(index);
         });
     });
 }
 
 // Render writeup cards
 function renderWriteups() {
+    const writeupsGrid = document.getElementById('writeups-grid');
     writeupsGrid.innerHTML = '';
     
-    writeups.forEach(writeup => {
-        const writeupCard = document.createElement('div');
-        writeupCard.className = 'writeup-card';
-        writeupCard.innerHTML = `
-            <h3>${writeup.title}</h3>
-            <p>${writeup.description}</p>
-            <div class="card-actions">
-                <button class="btn btn-primary git-btn" data-url="${writeup.githubUrl}">Git</button>
-                <button class="btn btn-secondary view-btn" data-file="${writeup.markdownFile}" data-url="${writeup.githubUrl}">View</button>
+    writeups.forEach((writeup, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-content">
+                <h3 class="card-title">${writeup.title}</h3>
+                <p class="card-description">${writeup.description}</p>
+                <div class="card-buttons">
+                    <a href="${writeup.githubUrl}" class="card-btn" target="_blank" rel="noopener noreferrer">Git</a>
+                    <button class="card-btn view-writeup" data-index="${index}">View</button>
+                </div>
             </div>
         `;
-        writeupsGrid.appendChild(writeupCard);
+        writeupsGrid.appendChild(card);
     });
     
-    // Add event listeners to the new buttons
-    document.querySelectorAll('.git-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            window.open(btn.getAttribute('data-url'), '_blank', 'noopener,noreferrer');
-        });
-    });
-    
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            loadMarkdown(btn.getAttribute('data-file'), btn.getAttribute('data-url'));
+    // Add event listeners to view buttons
+    document.querySelectorAll('.view-writeup').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const index = e.target.getAttribute('data-index');
+            showWriteupDetail(index);
         });
     });
 }
 
-// Load markdown content
-function loadMarkdown(filePath, githubUrl) {
-    fetch(filePath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Markdown file not found');
-            }
-            return response.text();
-        })
-        .then(markdown => {
-            markdownContent.innerHTML = marked.parse(markdown);
-            githubButton.setAttribute('data-url', githubUrl);
-            switchSection('detail-view');
-        })
-        .catch(error => {
-            markdownContent.innerHTML = `
-                <h2>Content Not Available</h2>
-                <p>The requested content could not be loaded. ${error.message}</p>
-                <p>Please check the GitHub repository for more information.</p>
-            `;
-            githubButton.setAttribute('data-url', githubUrl);
-            switchSection('detail-view');
-        });
+// Show project detail
+function showProjectDetail(index) {
+    const project = projects[index];
+    
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Show project detail view
+    document.getElementById('project-detail').classList.add('active');
+    
+    // Set GitHub button link
+    document.getElementById('project-github').href = project.githubUrl;
+    
+    // Load and render markdown
+    // For demo purposes, we'll use placeholder content
+    document.getElementById('project-content').innerHTML = `
+        <h2>${project.title}</h2>
+        <p>This is a placeholder for the project detail view. In a real implementation, this would load content from ${project.markdownFile}.</p>
+        <p>Project description: ${project.description}</p>
+        <p><a href="${project.githubUrl}" target="_blank">View on GitHub</a></p>
+    `;
+    
+    // Pause matrix animation
+    matrixAnimation.pause();
+    document.getElementById('matrix').style.display = 'none';
 }
 
-// Setup social links
-function setupSocialLinks() {
-    // Header social links
-    document.getElementById('linkedin').href = socialLinks.linkedin;
-    document.getElementById('twitter').href = socialLinks.twitter;
-    document.getElementById('github').href = socialLinks.github;
-    document.getElementById('medium').href = socialLinks.medium;
+// Show writeup detail
+function showWriteupDetail(index) {
+    const writeup = writeups[index];
     
-    // Footer social links
-    document.getElementById('footer-linkedin').href = socialLinks.linkedin;
-    document.getElementById('footer-twitter').href = socialLinks.twitter;
-    document.getElementById('footer-github').href = socialLinks.github;
-    document.getElementById('footer-medium').href = socialLinks.medium;
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
     
-    // Add external link attributes
-    document.querySelectorAll('a[href^="http"]').forEach(link => {
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener noreferrer');
+    // Show writeup detail view
+    document.getElementById('writeup-detail').classList.add('active');
+    
+    // Set GitHub button link
+    document.getElementById('writeup-github').href = writeup.githubUrl;
+    
+    // Load and render markdown
+    // For demo purposes, we'll use placeholder content
+    document.getElementById('writeup-content').innerHTML = `
+        <h2>${writeup.title}</h2>
+        <p>This is a placeholder for the writeup detail view. In a real implementation, this would load content from ${writeup.markdownFile}.</p>
+        <p>Writeup description: ${writeup.description}</p>
+        <p><a href="${writeup.githubUrl}" target="_blank">View on GitHub</a></p>
+    `;
+    
+    // Pause matrix animation
+    matrixAnimation.pause();
+    document.getElementById('matrix').style.display = 'none';
+}
+
+// Back to list views
+function initBackButtons() {
+    // Project back button
+    document.getElementById('project-back').addEventListener('click', () => {
+        document.getElementById('project-detail').classList.remove('active');
+        document.getElementById('projects').classList.add('active');
+        
+        // Resume matrix animation
+        matrixAnimation.resume();
+        document.getElementById('matrix').style.display = 'block';
+    });
+    
+    // Writeup back button
+    document.getElementById('writeup-back').addEventListener('click', () => {
+        document.getElementById('writeup-detail').classList.remove('active');
+        document.getElementById('writeups').classList.add('active');
+        
+        // Resume matrix animation
+        matrixAnimation.resume();
+        document.getElementById('matrix').style.display = 'block';
     });
 }
 
-// Event listeners
-function setupEventListeners() {
-    // Navigation
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchSection(link.getAttribute('data-target'));
-        });
+// Initialize CTA buttons
+function initCTAs() {
+    // View Projects button
+    document.getElementById('view-projects').addEventListener('click', () => {
+        document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        
+        document.querySelector('[data-tab="projects"]').classList.add('active');
+        document.getElementById('projects').classList.add('active');
     });
     
-    // Back button
-    backButton.addEventListener('click', () => {
-        switchSection('projects');
+    // Get in Touch button (home)
+    document.getElementById('get-in-touch').addEventListener('click', () => {
+        window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank');
     });
     
-    // GitHub button
-    githubButton.addEventListener('click', () => {
-        window.open(githubButton.getAttribute('data-url'), '_blank', 'noopener,noreferrer');
+    // Blog button
+    document.getElementById('blog-btn').addEventListener('click', () => {
+        window.open('https://medium.com/@duncanmaganga10', '_blank');
     });
     
-    // Hamburger menu
+    // Get in Touch button (contact)
+    document.getElementById('contact-email').addEventListener('click', () => {
+        window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank');
+    });
+}
+
+// Mobile menu toggle
+function initMobileMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
     hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
     });
     
-    // Home page buttons
-    viewProjectsBtn.addEventListener('click', () => {
-        switchSection('projects');
-    });
-    
-    getInTouchBtn.addEventListener('click', () => {
-        window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank', 'noopener,noreferrer');
-    });
-    
-    blogBtn.addEventListener('click', () => {
-        window.open('https://medium.com/@duncanmaganga10', '_blank', 'noopener,noreferrer');
-    });
-    
-    // Blog page button
-    mediumBtn.addEventListener('click', () => {
-        window.open('https://medium.com/@duncanmaganga10', '_blank', 'noopener,noreferrer');
-    });
-    
-    // Contact page button
-    contactBtn.addEventListener('click', () => {
-        window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank', 'noopener,noreferrer');
-    });
-    
-    // Window resize
-    window.addEventListener('resize', () => {
-        matrixCanvas.width = window.innerWidth;
-        matrixCanvas.height = window.innerHeight;
-        
-        // Recalculate columns for matrix
-        const newColumns = matrixCanvas.width / fontSize;
-        while (drops.length < newColumns) {
-            drops.push(1);
-        }
-        while (drops.length > newColumns) {
-            drops.pop();
-        }
+    // Close menu when clicking on a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
     });
 }
 
-// Initialize the application
-function init() {
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize matrix animation
+    window.matrixAnimation = matrix();
+    
+    // Initialize tabs
+    initTabs();
+    
+    // Render project and writeup cards
     renderProjects();
     renderWriteups();
-    setupSocialLinks();
-    setupEventListeners();
-    startMatrix();
-}
+    
+    // Initialize back buttons
+    initBackButtons();
+    
+    // Initialize CTA buttons
+    initCTAs();
+    
+    // Initialize mobile menu
+    initMobileMenu();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        matrixAnimation.resize();
+    });
+});
 
-// Start when DOM is loaded
-document.addEventListener('DOMContentLoaded', init);
 
