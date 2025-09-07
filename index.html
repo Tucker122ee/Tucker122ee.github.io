@@ -1,1079 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duncan M Kahindi - SOC Analyst</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --dark-navy: #0a192f;
-            --navy: #112240;
-            --light-navy: #233554;
-            --accent-teal: #64ffda;
-            --light-slate: #a8b2d1;
-            --lightest-slate: #ccd6f6;
-            --white: #e6f1ff;
-            --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
-            --font-sans: 'Calibre', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
-            --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 100%);
-            color: var(--light-slate);
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        #matrix {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.15;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: rgba(10, 25, 47, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 0 50px;
-            transition: var(--transition);
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .nav-logo {
-            color: var(--accent-teal);
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-left: 30px;
-        }
-
-        .nav-link {
-            color: var(--light-slate);
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 10px 0;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent-teal);
-            transition: var(--transition);
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--accent-teal);
-        }
-
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .bar {
-            width: 25px;
-            height: 3px;
-            background-color: var(--accent-teal);
-            margin: 3px 0;
-            transition: var(--transition);
-        }
-
-        main {
-            padding-top: 70px;
-            min-height: calc(100vh - 200px);
-        }
-
-        .tab-content {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-
-        .tab-content.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .detail-view {
-            display: none;
-        }
-
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .hero-content h1 {
-            font-size: 3rem;
-            color: var(--white);
-            margin-bottom: 20px;
-        }
-
-        .hero-content h2 {
-            font-size: 1.5rem;
-            color: var(--lightest-slate);
-            margin-bottom: 15px;
-            font-weight: 400;
-        }
-
-        .caption {
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            color: var(--light-slate);
-        }
-
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .cta-btn {
-            background: transparent;
-            color: var(--accent-teal);
-            border: 1px solid var(--accent-teal);
-            border-radius: 4px;
-            padding: 12px 28px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(100, 255, 218, 0.1);
-            transition: var(--transition);
-            z-index: -1;
-        }
-
-        .cta-btn:hover::before {
-            left: 0;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 80px 20px;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            color: var(--white);
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 2px;
-            background-color: var(--accent-teal);
-            margin: 15px auto 0;
-        }
-
-        .projects-grid, .writeups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .card {
-            background-color: var(--light-navy);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: var(--transition);
-            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 30px -15px rgba(2, 12, 27, 0.7);
-        }
-
-        .card-content {
-            padding: 25px;
-        }
-
-        .card-title {
-            font-size: 1.4rem;
-            color: var(--white);
-            margin-bottom: 15px;
-        }
-
-        .card-description {
-            color: var(--light-slate);
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-        }
-
-        .card-buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .card-btn {
-            background: transparent;
-            color: var(--accent-teal);
-            border: 1px solid var(--accent-teal);
-            border-radius: 4px;
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            flex: 1;
-            margin: 0 5px;
-        }
-
-        .card-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-        }
-
-        .detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .back-btn {
-            background: transparent;
-            color: var(--accent-teal);
-            border: 1px solid var(--accent-teal);
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .back-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-        }
-
-        .github-btn {
-            background: transparent;
-            color: var(--accent-teal);
-            border: 1px solid var(--accent-teal);
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .github-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-        }
-
-        .markdown-content {
-            background-color: var(--light-navy);
-            border-radius: 8px;
-            padding: 40px;
-            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
-        }
-
-        .markdown-content h1,
-        .markdown-content h2,
-        .markdown-content h3 {
-            color: var(--white);
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
-        .markdown-content p {
-            margin-bottom: 15px;
-            line-height: 1.7;
-        }
-
-        .markdown-content code {
-            background-color: var(--dark-navy);
-            border-radius: 3px;
-            padding: 2px 5px;
-            font-family: var(--font-mono);
-            font-size: 0.9em;
-        }
-
-        .markdown-content pre {
-            background-color: var(--dark-navy);
-            border-radius: 8px;
-            padding: 20px;
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .markdown-content pre code {
-            background: transparent;
-            padding: 0;
-        }
-
-        .markdown-content img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .blog-content {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .blog-content p {
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-
-        .medium-btn {
-            background: transparent;
-            color: var(--accent-teal);
-            border: 1px solid var(--accent-teal);
-            border-radius: 4px;
-            padding: 12px 28px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .medium-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-        }
-
-        .contact-content {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .contact-content p {
-            margin-bottom: 40px;
-            font-size: 1.1rem;
-        }
-
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .social-btn {
-            background: transparent;
-            color: var(--accent-teal);
-            border: 1px solid var(--accent-teal);
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .social-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-        }
-
-        .footer {
-            background-color: var(--dark-navy);
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        .footer-text {
-            font-size: 1.2rem;
-            color: var(--accent-teal);
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .copyright {
-            color: var(--light-slate);
-            margin-bottom: 20px;
-        }
-
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .social-icon {
-            color: var(--light-slate);
-            text-decoration: none;
-            transition: var(--transition);
-            font-size: 1.2rem;
-        }
-
-        .social-icon:hover {
-            color: var(--accent-teal);
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 0 20px;
-            }
-            
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 70px;
-                flex-direction: column;
-                background-color: var(--dark-navy);
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                padding: 20px 0;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .nav-item {
-                margin: 20px 0;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-            
-            .hamburger.active .bar:nth-child(2) {
-                opacity: 0;
-            }
-            
-            .hamburger.active .bar:nth-child(1) {
-                transform: translateY(8px) rotate(45deg);
-            }
-            
-            .hamburger.active .bar:nth-child(3) {
-                transform: translateY(-8px) rotate(-45deg);
-            }
-            
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-content h2 {
-                font-size: 1.2rem;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .projects-grid, .writeups-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .social-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .footer-social {
-                flex-wrap: wrap;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-content h1 {
-                font-size: 2rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 60px 15px;
-            }
-            
-            .markdown-content {
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Duncan M Kahindi — Cybersecurity Portfolio</title>
+  <meta name="description" content="Duncan M Kahindi — SOC Analyst portfolio. Dark, techy, cybersecurity themed SPA with projects and writeups." />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Marked.js for rendering markdown (required) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" crossorigin="anonymous"></script>
+  <!-- Defer our app logic -->
+  <script defer src="index.js"></script>
 </head>
 <body>
-    <!-- Matrix Canvas Background -->
-    <canvas id="matrix"></canvas>
+  <!-- Matrix Background (visible on list pages only) -->
+  <canvas id="matrix" aria-hidden="true"></canvas>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">Duncan M Kahindi</div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#home" class="nav-link active" data-tab="home">Home</a></li>
-                <li class="nav-item"><a href="#projects" class="nav-link" data-tab="projects">Projects</a></li>
-                <li class="nav-item"><a href="#writeups" class="nav-link" data-tab="writeups">Writeups</a></li>
-                <li class="nav-item"><a href="#blog" class="nav-link" data-tab="blog">Blog</a></li>
-                <li class="nav-item"><a href="#contact" class="nav-link" data-tab="contact">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
+  <header class="site-header">
+    <div class="brand">
+      <button id="menuToggle" class="hamburger" aria-label="Open navigation" aria-controls="primaryNav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <h1 class="brand-name">Duncan M Kahindi</h1>
+    </div>
+
+    <nav id="primaryNav" class="nav" aria-label="Primary">
+      <ul>
+        <li><button class="tablink" data-route="#/home">Home</button></li>
+        <li><button class="tablink" data-route="#/projects">Projects</button></li>
+        <li><button class="tablink" data-route="#/writeups">Writeups</button></li>
+        <li><button class="tablink" data-route="#/blog">Blog</button></li>
+        <li><button class="tablink" data-route="#/contact">Contact</button></li>
+      </ul>
+      <div class="socials header-socials" role="group" aria-label="Social links">
+        <button class="icon-btn" data-social="linkedin" aria-label="LinkedIn" title="LinkedIn">
+          <!-- LinkedIn SVG -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05c.53-1 1.84-2.1 3.78-2.1 4.04 0 4.79 2.66 4.79 6.12V24h-4v-7.2c0-1.72-.03-3.95-2.41-3.95-2.42 0-2.79 1.89-2.79 3.83V24h-4V8.5z"/></svg>
+        </button>
+        <button class="icon-btn" data-social="twitter" aria-label="X (Twitter)" title="X / Twitter">
+          <!-- X/Twitter SVG -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.46 6c-.77.34-1.6.56-2.46.66a4.29 4.29 0 0 0 1.88-2.38 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 11.1 8.1a12.15 12.15 0 0 1-8.82-4.47 4.28 4.28 0 0 0 1.32 5.72c-.66-.02-1.27-.2-1.81-.5v.05a4.28 4.28 0 0 0 3.43 4.2c-.31.09-.64.13-.98.13-.24 0-.48-.02-.7-.06a4.29 4.29 0 0 0 4 2.98A8.59 8.59 0 0 1 1 19.54 12.09 12.09 0 0 0 7.56 21c7.55 0 11.68-6.26 11.68-11.7 0-.18-.01-.36-.02-.53A8.35 8.35 0 0 0 22.46 6z"/></svg>
+        </button>
+        <button class="icon-btn" data-social="github" aria-label="GitHub" title="GitHub">
+          <!-- GitHub SVG -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2.02c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.78-1.34-1.78-1.1-.75.09-.74.09-.74 1.22.08 1.86 1.25 1.86 1.25 1.08 1.85 2.83 1.31 3.52 1 .11-.78.42-1.31.77-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.39 1.24-3.24-.13-.3-.54-1.51.12-3.15 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.64.25 2.85.12 3.15.77.85 1.24 1.93 1.24 3.24 0 4.61-2.8 5.62-5.47 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.21.69.82.58A12 12 0 0 0 12 .5z"/></svg>
+        </button>
+        <button class="icon-btn" data-social="medium" aria-label="Medium" title="Medium">
+          <!-- Medium SVG -->
+          <svg viewBox="0 0 1043.63 592.71" aria-hidden="true"><path d="M588.67 296.36c0 163.66-131.73 296.35-294.33 296.35S0 460.02 0 296.36 131.72 0 294.34 0s294.33 132.7 294.33 296.36zM846.95 296.36c0 154.2-65.9 279.12-147.25 279.12S552.47 450.56 552.47 296.36 618.37 17.24 699.7 17.24s147.25 124.92 147.25 279.12zM1043.63 296.36c0 136.15-24.2 246.5-54.07 246.5-29.86 0-54.06-110.35-54.06-246.5 0-136.16 24.2-246.51 54.06-246.51 29.87 0 54.07 110.35 54.07 246.51z"/></svg>
+        </button>
+      </div>
     </nav>
+  </header>
 
-    <!-- Main Content Sections -->
-    <main>
-        <!-- Home Section -->
-        <section id="home" class="tab-content active">
-            <div class="hero">
-                <div class="hero-content">
-                    <h1>Welcome! I'm Duncan M Kahindi</h1>
-                    <h2>A SOC Analyst protecting businesses from cyber threats so they can grow with confidence.</h2>
-                    <p class="caption">Defending the internet, one threat at a time.</p>
-                    <div class="cta-buttons">
-                        <button class="cta-btn" id="view-projects">View My Projects</button>
-                        <button class="cta-btn" id="get-in-touch">Get in Touch</button>
-                        <button class="cta-btn" id="blog-btn">Blog</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects List Section -->
-        <section id="projects" class="tab-content">
-            <div class="container">
-                <h2 class="section-title">My Projects</h2>
-                <div class="projects-grid" id="projects-grid">
-                    <!-- Projects will be dynamically inserted here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Project Detail Section -->
-        <section id="project-detail" class="tab-content detail-view">
-            <div class="container">
-                <div class="detail-header">
-                    <button class="back-btn" id="project-back">← Back</button>
-                    <a href="#" class="github-btn" id="project-github" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
-                </div>
-                <div class="markdown-content" id="project-content"></div>
-            </div>
-        </section>
-
-        <!-- Writeups List Section -->
-        <section id="writeups" class="tab-content">
-            <div class="container">
-                <h2 class="section-title">My Writeups</h2>
-                <div class="writeups-grid" id="writeups-grid">
-                    <!-- Writeups will be dynamically inserted here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Writeup Detail Section -->
-        <section id="writeup-detail" class="tab-content detail-view">
-            <div class="container">
-                <div class="detail-header">
-                    <button class="back-btn" id="writeup-back">← Back</button>
-                    <a href="#" class="github-btn" id="writeup-github" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
-                </div>
-                <div class="markdown-content" id="writeup-content"></div>
-            </div>
-        </section>
-
-        <!-- Blog Section -->
-        <section id="blog" class="tab-content">
-            <div class="container">
-                <h2 class="section-title">My Blog</h2>
-                <div class="blog-content">
-                    <p>I regularly write about cybersecurity topics on Medium. Check out my latest articles!</p>
-                    <a href="https://medium.com/@duncanmaganga10" target="_blank" rel="noopener noreferrer" class="medium-btn">Visit My Medium Blog</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="tab-content">
-            <div class="container">
-                <h2 class="section-title">Get In Touch</h2>
-                <div class="contact-content">
-                    <p>I am always online and ready to discuss how to defend the internet.</p>
-                    <div class="social-buttons">
-                        <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-btn linkedin">LinkedIn</a>
-                        <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-btn twitter">Twitter</a>
-                        <a href="https://github.com/Duncan-Maganga" target="_blank" rel="noopener noreferrer" class="social-btn github">GitHub</a>
-                        <a href="https://medium.com/@duncanmaganga10" target="_blank" rel="noopener noreferrer" class="social-btn medium">Medium</a>
-                    </div>
-                    <button class="cta-btn" id="contact-email">Get in Touch</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p class="footer-text">YOU DESERVE THE BEST SECURITY</p>
-            <p class="copyright">© 2025 Duncan Maganga — All rights reserved</p>
-            <div class="footer-social">
-                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-icon linkedin"><i class="fab fa-linkedin"></i></a>
-                <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-icon twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://github.com/Duncan-Maganga" target="_blank" rel="noopener noreferrer" class="social-icon github"><i class="fab fa-github"></i></a>
-                <a href="https://medium.com/@duncanmaganga10" target="_blank" rel="noopener noreferrer" class="social-icon medium"><i class="fab fa-medium"></i></a>
-            </div>
+  <main id="app" class="app" role="main">
+    <!-- HOME -->
+    <section id="view-home" class="view" data-view="home" aria-labelledby="homeTitle">
+      <div class="hero">
+        <div class="hero-left">
+          <h2 id="homeTitle" class="hero-title">
+            Welcome! I’m Duncan M Kahindi, a Social Analyst protecting businesses from cyber threats so they can grow with confidence.
+          </h2>
+          <p class="hero-caption">Defending the internet, one threat at a time.</p>
+          <div class="cta-row">
+            <button class="btn primary" data-route="#/projects">View My Projects</button>
+            <button class="btn outline" id="btnEmailHome">Get in Touch</button>
+            <button class="btn ghost" id="btnBlogHome">Blog</button>
+          </div>
         </div>
-    </footer>
+        <div class="hero-right">
+          <div class="hero-card">
+            <h3>Secure • Resilient • Ready</h3>
+            <p>Threat detection, incident response, malware analysis, and blue-team tooling. Building safer systems for real businesses.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <script>
-        // Project metadata
-        const projects = [
-            {
-                title: "Phishing Simulation with GoPhish",
-                description: "A comprehensive phishing simulation project using GoPhish to test and improve organizational security awareness.",
-                githubUrl: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish",
-                markdownFile: "projects/project1.md"
-            },
-            {
-                title: "Web Application Vulnerability Assessment Report",
-                description: "Detailed vulnerability assessment of a web application with findings and remediation recommendations.",
-                githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_001",
-                markdownFile: "projects/project2.md"
-            },
-            {
-                title: "Incident Response Simulation Report",
-                description: "Simulated incident response exercise documenting detection, analysis, and response procedures.",
-                githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
-                markdownFile: "projects/project3.md"
-            },
-            {
-                title: "Secure File Sharing System",
-                description: "A secure system for sharing files with encryption and access control mechanisms.",
-                githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
-                markdownFile: "projects/project4.md"
-            }
-        ];
+    <!-- PROJECTS (List) -->
+    <section id="view-projects" class="view" data-view="projects" aria-labelledby="projectsTitle" aria-hidden="true" inert>
+      <h2 id="projectsTitle">Projects</h2>
+      <div id="projectsGrid" class="grid" role="list"></div>
+    </section>
 
-        // Generate placeholder projects 5-50
-        for (let i = 5; i <= 50; i++) {
-            projects.push({
-                title: `Project ${i}`,
-                description: `Description for Project ${i}. This is a placeholder project description.`,
-                githubUrl: `https://github.com/Duncan-Maganga/project-${i}`,
-                markdownFile: `projects/project${i}.md`
-            });
-        }
+    <!-- PROJECT DETAIL -->
+    <section id="view-project-detail" class="view detail" data-view="project-detail" aria-labelledby="projectDetailTitle" aria-hidden="true" inert>
+      <div class="detail-topbar">
+        <button class="btn" id="btnBackProjects" aria-label="Back to projects">← Back</button>
+        <div class="spacer"></div>
+        <button class="btn outline" id="btnOpenProjectGit">Open on GitHub</button>
+      </div>
+      <article id="projectDetail" class="markdown-body">
+        <h2 id="projectDetailTitle">Loading…</h2>
+      </article>
+    </section>
 
-        // Writeup metadata
-        const writeups = [
-            {
-                title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
-                description: "A comprehensive guide to Server Message Block protocol, its functionality, and security implications.",
-                githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
-                markdownFile: "writeups/writeup1.md"
-            },
-            {
-                title: "Suricata Lab Demo",
-                description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
-                githubUrl: "https://github.com/Duncan-Maganga/Suricata",
-                markdownFile: "writeups/writeup2.md"
-            }
-        ];
+    <!-- WRITEUPS (List) -->
+    <section id="view-writeups" class="view" data-view="writeups" aria-labelledby="writeupsTitle" aria-hidden="true" inert>
+      <h2 id="writeupsTitle">Writeups</h2>
+      <div id="writeupsGrid" class="grid" role="list"></div>
+    </section>
 
-        // Generate placeholder writeups 3-50
-        for (let i = 3; i <= 50; i++) {
-            writeups.push({
-                title: `Writeup ${i}`,
-                description: `Description for Writeup ${i}. This is a placeholder writeup description.`,
-                githubUrl: `https://github.com/Duncan-Maganga/writeup-${i}`,
-                markdownFile: `writeups/writeup${i}.md`
-            });
-        }
+    <!-- WRITEUP DETAIL -->
+    <section id="view-writeup-detail" class="view detail" data-view="writeup-detail" aria-labelledby="writeupDetailTitle" aria-hidden="true" inert>
+      <div class="detail-topbar">
+        <button class="btn" id="btnBackWriteups" aria-label="Back to writeups">← Back</button>
+        <div class="spacer"></div>
+        <button class="btn outline" id="btnOpenWriteupGit">Open on GitHub</button>
+      </div>
+      <article id="writeupDetail" class="markdown-body">
+        <h2 id="writeupDetailTitle">Loading…</h2>
+      </article>
+    </section>
 
-        // Matrix animation
-        const matrix = () => {
-            const canvas = document.getElementById('matrix');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const letters = '01010101010101010101010101010101';
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            
-            const drops = [];
-            for (let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-            
-            function draw() {
-                ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#64ffda';
-                ctx.font = `${fontSize}px monospace`;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = letters[Math.floor(Math.random() * letters.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    
-                    drops[i]++;
-                }
-                
-                if (matrixAnimationActive) {
-                    requestAnimationFrame(draw);
-                }
-            }
-            
-            let matrixAnimationActive = true;
-            requestAnimationFrame(draw);
-            
-            // Pause/resume functionality
-            return {
-                pause: () => {
-                    matrixAnimationActive = false;
-                    canvas.style.display = 'none';
-                },
-                resume: () => {
-                    matrixAnimationActive = true;
-                    canvas.style.display = 'block';
-                    requestAnimationFrame(draw);
-                },
-                resize: () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                    
-                    // Recalculate columns
-                    const newColumns = canvas.width / fontSize;
-                    for (let i = 0; i < newColumns; i++) {
-                        if (!drops[i]) drops[i] = 1;
-                    }
-                    drops.length = newColumns;
-                }
-            };
-        };
+    <!-- BLOG -->
+    <section id="view-blog" class="view" data-view="blog" aria-labelledby="blogTitle" aria-hidden="true" inert>
+      <h2 id="blogTitle">Blog on Medium</h2>
+      <p>My long-form thoughts live on Medium.</p>
+      <button class="btn primary" id="btnBlogTab">Open Medium</button>
+      <p class="small">A new tab will open to my Medium profile.</p>
+    </section>
 
-        // Tab navigation
-        function initTabs() {
-            const tabs = document.querySelectorAll('.nav-link');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Show corresponding content
-                    const tabName = tab.getAttribute('data-tab');
-                    const contentElement = document.getElementById(tabName);
-                    if (contentElement) {
-                        contentElement.classList.add('active');
-                    }
-                    
-                    // If on mobile, close hamburger menu
-                    document.querySelector('.nav-menu').classList.remove('active');
-                    document.querySelector('.hamburger').classList.remove('active');
-                    
-                    // Resume matrix animation for list views, pause for detail views
-                    if (tabName === 'project-detail' || tabName === 'writeup-detail') {
-                        matrixAnimation.pause();
-                    } else {
-                        matrixAnimation.resume();
-                    }
-                });
-            });
-        }
+    <!-- CONTACT -->
+    <section id="view-contact" class="view" data-view="contact" aria-labelledby="contactTitle" aria-hidden="true" inert>
+      <h2 id="contactTitle">Contact</h2>
+      <p class="lede">"I am always online and ready to discuss how to defend the internet."</p>
+      <div class="contact-actions">
+        <button class="btn primary" id="btnEmailContact">Get in Touch</button>
+        <p class="small">If Gmail compose doesn’t open, use <button class="linklike" id="btnMailtoFallback">mailto fallback</button>.</p>
+      </div>
+      <div class="socials contact-socials" role="group" aria-label="Social links">
+        <button class="icon-btn" data-social="linkedin" aria-label="LinkedIn">L</button>
+        <button class="icon-btn" data-social="twitter" aria-label="X (Twitter)">X</button>
+        <button class="icon-btn" data-social="github" aria-label="GitHub">G</button>
+        <button class="icon-btn" data-social="medium" aria-label="Medium">M</button>
+      </div>
+    </section>
+  </main>
 
-        // Render project cards
-        function renderProjects() {
-            const projectsGrid = document.getElementById('projects-grid');
-            projectsGrid.innerHTML = '';
-            
-            projects.forEach((project, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-content">
-                        <h3 class="card-title">${project.title}</h3>
-                        <p class="card-description">${project.description}</p>
-                        <div class="card-buttons">
-                            <a href="${project.githubUrl}" class="card-btn" target="_blank" rel="noopener noreferrer">Git</a>
-                            <button class="card-btn view-project" data-index="${index}">View</button>
-                        </div>
-                    </div>
-                `;
-                projectsGrid.appendChild(card);
-            });
-            
-            // Add event listeners to view buttons
-            document.querySelectorAll('.view-project').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const index = e.target.getAttribute('data-index');
-                    showProjectDetail(index);
-                });
-            });
-        }
-
-        // Render writeup cards
-        function renderWriteups() {
-            const writeupsGrid = document.getElementById('writeups-grid');
-            writeupsGrid.innerHTML = '';
-            
-            writeups.forEach((writeup, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-content">
-                        <h3 class="card-title">${writeup.title}</h3>
-                        <p class="card-description">${writeup.description}</p>
-                        <div class="card-buttons">
-                            <a href="${writeup.githubUrl}" class="card-btn" target="_blank" rel="noopener noreferrer">Git</a>
-                            <button class="card-btn view-writeup" data-index="${index}">View</button>
-                        </div>
-                    </div>
-                `;
-                writeupsGrid.appendChild(card);
-            });
-            
-            // Add event listeners to view buttons
-            document.querySelectorAll('.view-writeup').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const index = e.target.getAttribute('data-index');
-                    showWriteupDetail(index);
-                });
-            });
-        }
-
-        // Show project detail
-        function showProjectDetail(index) {
-            const project = projects[index];
-            
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show project detail view
-            document.getElementById('project-detail').classList.add('active');
-            
-            // Set GitHub button link
-            document.getElementById('project-github').href = project.githubUrl;
-            
-            // Load and render markdown
-            // For demo purposes, we'll use placeholder content
-            document.getElementById('project-content').innerHTML = `
-                <h2>${project.title}</h2>
-                <p>This is a placeholder for the project detail view. In a real implementation, this would load content from ${project.markdownFile}.</p>
-                <p>Project description: ${project.description}</p>
-                <p><a href="${project.githubUrl}" target="_blank">View on GitHub</a></p>
-            `;
-            
-            // Pause matrix animation
-            matrixAnimation.pause();
-        }
-
-        // Show writeup detail
-        function showWriteupDetail(index) {
-            const writeup = writeups[index];
-            
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show writeup detail view
-            document.getElementById('writeup-detail').classList.add('active');
-            
-            // Set GitHub button link
-            document.getElementById('writeup-github').href = writeup.githubUrl;
-            
-            // Load and render markdown
-            // For demo purposes, we'll use placeholder content
-            document.getElementById('writeup-content').innerHTML = `
-                <h2>${writeup.title}</h2>
-                <p>This is a placeholder for the writeup detail view. In a real implementation, this would load content from ${writeup.markdownFile}.</p>
-                <p>Writeup description: ${writeup.description}</p>
-                <p><a href="${writeup.githubUrl}" target="_blank">View on GitHub</a></p>
-            `;
-            
-            // Pause matrix animation
-            matrixAnimation.pause();
-        }
-
-        // Back to list views
-        function initBackButtons() {
-            // Project back button
-            document.getElementById('project-back').addEventListener('click', () => {
-                document.getElementById('project-detail').classList.remove('active');
-                document.getElementById('projects').classList.add('active');
-                
-                // Resume matrix animation
-                matrixAnimation.resume();
-            });
-            
-            // Writeup back button
-            document.getElementById('writeup-back').addEventListener('click', () => {
-                document.getElementById('writeup-detail').classList.remove('active');
-                document.getElementById('writeups').classList.add('active');
-                
-                // Resume matrix animation
-                matrixAnimation.resume();
-            });
-        }
-
-        // Initialize CTA buttons
-        function initCTAs() {
-            // View Projects button
-            document.getElementById('view-projects').addEventListener('click', () => {
-                document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                
-                document.querySelector('[data-tab="projects"]').classList.add('active');
-                document.getElementById('projects').classList.add('active');
-            });
-            
-            // Get in Touch button (home)
-            document.getElementById('get-in-touch').addEventListener('click', () => {
-                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank');
-            });
-            
-            // Blog button
-            document.getElementById('blog-btn').addEventListener('click', () => {
-                window.open('https://medium.com/@duncanmaganga10', '_blank');
-            });
-            
-            // Get in Touch button (contact)
-            document.getElementById('contact-email').addEventListener('click', () => {
-                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank');
-            });
-        }
-
-        // Mobile menu toggle
-        function initMobileMenu() {
-            const hamburger = document.querySelector('.hamburger');
-            const navMenu = document.querySelector('.nav-menu');
-            
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
-            
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                });
-            });
-        }
-
-        // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize matrix animation
-            window.matrixAnimation = matrix();
-            
-            // Initialize tabs
-            initTabs();
-            
-            // Render project and writeup cards
-            renderProjects();
-            renderWriteups();
-            
-            // Initialize back buttons
-            initBackButtons();
-            
-            // Initialize CTA buttons
-            initCTAs();
-            
-            // Initialize mobile menu
-            initMobileMenu();
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                matrixAnimation.resize();
-            });
-        });
-    </script>
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-left">
+      <p><strong>Location:</strong> Worldwide • <strong>Email:</strong> <span aria-label="Duncan's email">duncanmaganga10@gmail.com</span></p>
+    </div>
+    <div class="footer-right socials" role="group" aria-label="Footer social links">
+      <button class="icon-btn" data-social="linkedin" aria-label="LinkedIn">L</button>
+      <button class="icon-btn" data-social="twitter" aria-label="X (Twitter)">X</button>
+      <button class="icon-btn" data-social="github" aria-label="GitHub">G</button>
+      <button class="icon-btn" data-social="medium" aria-label="Medium">M</button>
+    </div>
+    <div class="footer-bottom">
+      <p>YOU DESERVE THE BEST SECURITY — © 2025 Duncan Maganga. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>
