@@ -2,6 +2,7 @@
 
 ![Screenshot](../images2/camp.png)
 
+
 ## Introduction
 Suricata is a high-performance, open-source network analysis and threat detection software. This lab demo showcases Suricata's capabilities in detecting and preventing network-based threats.
 
