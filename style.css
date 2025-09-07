@@ -17,7 +17,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 100%);
+    background-color: var(--dark-navy);
     color: var(--lightest-slate);
     line-height: 1.6;
     overflow-x: hidden;
@@ -120,6 +120,7 @@ header .container {
     display: none;
     min-height: 100vh;
     padding: 100px 0 60px;
+    background-color: var(--dark-navy);
 }
 
 .section.active {
