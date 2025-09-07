@@ -107,8 +107,8 @@ const projects = [
 ];
 
 const writeups = [
-    { title: "Writeup 1", description: "Analysis of recent ransomware attack patterns and defense strategies.", link: "https://github.com/Duncan-Maganga/writeup1", markdown: "writeup1.md" },
-    { title: "Writeup 2", description: "Comprehensive guide to implementing zero-trust architecture.", link: "https://github.com/Duncan-Maganga/writeup2", markdown: "writeup2.md" },
+    { title: "Writeup 1", description: "Analysis of recent ransomware attack patterns and defense strategies.", link: "https://github.com/Duncan-Maganga/writeup1", markdown: "writeups/writeup1.md" },
+    { title: "Writeup 2", description: "Comprehensive guide to implementing zero-trust architecture.", link: "https://github.com/Duncan-Maganga/writeup2", markdown: "writeups/writeup2.md" },
     { title: "Writeup 3", description: "Exploring phishing attack simulations and mitigation strategies.", link: "https://github.com/Duncan-Magangaa", markdown: "writeup3.md" },
     { title: "Writeup 4", description: "SQL injection case study with real-world exploitation patterns.", link: "https://github.com/Duncan-MagangaA", markdown: "writeup4.md" },
     { title: "Writeup 5", description: "Cross-site scripting (XSS) vulnerability testing in web apps.", link: "https://github.com/Duncan-Magangb", markdown: "writeup5.md" },
