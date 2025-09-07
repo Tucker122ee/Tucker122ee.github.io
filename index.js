@@ -62,7 +62,15 @@ const writeups = [
         githubUrl: "https://github.com/Duncan-Maganga/Suricata",
         markdownFile: "writeups/writeup2.md"
     },
-    // Writeups 3-50 with placeholder data
+
+    {
+        id: 3,
+        title: "This is a trial demo",
+        description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
+        githubUrl: "https://github.com/Duncan-Maganga/Suricata",
+        markdownFile: "writeups/writeup3.md"
+    }
+    // Writeups 4-50 with placeholder data
     ...Array.from({ length: 48 }, (_, i) => ({
         id: i + 3,
         title: `Writeup ${i + 3}`,

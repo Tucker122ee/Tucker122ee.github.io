@@ -1,11 +1,11 @@
-# writeups/writeup3.md
+# TRIAL DEMO
 
 # Writeup 3
 
 ![Writeup Screenshot](../images/writeup3.png)
 
 ## Overview
-This is a placeholder writeup for demonstration purposes. In a real implementation, this would contain detailed content about a cybersecurity topic, analysis, or research findings.
+This is a trial demo.
 
 ## Key Points
 - Placeholder content for writeup 3
