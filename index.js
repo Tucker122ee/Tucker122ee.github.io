@@ -29,32 +29,25 @@ const projects = [
         githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
         markdownFile: "projects/project3.md"
     },
-    {
-        id: 4,
-        title: "Secure File Sharing System",
-        description: "A secure system for file sharing with encryption and access control mechanisms.",
-        githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
-        markdownFile: "projects/project4.md"
-    },
-    // Projects 5-50 with placeholder data
-    ...Array.from({ length: 46 }, (_, i) => ({
-        id: i + 5,
-        title: `Project ${i + 5}`,
-        description: `Description for Project ${i + 5}. This is a placeholder project in cybersecurity.`,
-        githubUrl: `https://github.com/Duncan-Maganga/project-${i + 5}`,
-        markdownFile: `projects/project${i + 5}.md`
+    // Projects 4-50 with consistent numbering and GitHub link
+    ...Array.from({ length: 47 }, (_, i) => ({
+        id: i + 4,
+        title: `Project ${i + 4}`,
+        description: `Cybersecurity project ${i + 4} focusing on threat detection and prevention strategies.`,
+        githubUrl: "https://github.com/Duncan-Maganga",
+        markdownFile: `projects/project${i + 4}.md`
     }))
 ];
 
 // Writeup Metadata (50 writeups)
 const writeups = [
-   // {
-        //id: 1,
-        //title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
-        //description: "An in-depth exploration of the Server Message Block protocol and its security implications.",
-        //githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
-        //markdownFile: "writeups/writeup1.md"
-   // },
+    {
+        id: 1,
+        title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
+        description: "An in-depth exploration of the Server Message Block protocol and its security implications.",
+        githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
+        markdownFile: "writeups/writeup1.md"
+    },
     {
         id: 2,
         title: "Suricata Lab Demo",
@@ -62,20 +55,12 @@ const writeups = [
         githubUrl: "https://github.com/Duncan-Maganga/Suricata",
         markdownFile: "writeups/writeup2.md"
     },
-
-    {
-        id: 3,
-        title: "This is a trial demo",
-        description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
-        githubUrl: "https://github.com/Duncan-Maganga/Suricata",
-        markdownFile: "writeups/writeup3.md"
-    }
-    // Writeups 4-50 with placeholder data
+    // Writeups 3-50 with consistent numbering and GitHub link
     ...Array.from({ length: 48 }, (_, i) => ({
         id: i + 3,
         title: `Writeup ${i + 3}`,
-        description: `Description for Writeup ${i + 3}. This is a placeholder cybersecurity writeup.`,
-        githubUrl: `https://github.com/Duncan-Maganga/writeup-${i + 3}`,
+        description: `Cybersecurity writeup ${i + 3} analyzing security protocols and threat mitigation.`,
+        githubUrl: "https://github.com/Duncan-Maganga",
         markdownFile: `writeups/writeup${i + 3}.md`
     }))
 ];
@@ -120,10 +105,11 @@ function drawMatrix() {
     // Set green text with varying opacity
     matrixCtx.fillStyle = '#64ffda';
     
-    // Draw characters
+    // Draw characters - using only English alphanumeric characters
     matrixColumns.forEach((y, index) => {
-        // Random character
-        const text = String.fromCharCode(Math.random() * 128);
+        // Generate random English alphanumeric character
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
         
         // Draw character
         const x = index * matrixFontSize;
