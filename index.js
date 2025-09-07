@@ -48,13 +48,13 @@ const projects = [
 
 // Writeup Metadata (50 writeups)
 const writeups = [
-    {
-        id: 1,
-        title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
-        description: "An in-depth exploration of the Server Message Block protocol and its security implications.",
-        githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
-        markdownFile: "writeups/writeup1.md"
-    },
+   // {
+        //id: 1,
+        //title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
+        //description: "An in-depth exploration of the Server Message Block protocol and its security implications.",
+        //githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
+        //markdownFile: "writeups/writeup1.md"
+   // },
     {
         id: 2,
         title: "Suricata Lab Demo",
