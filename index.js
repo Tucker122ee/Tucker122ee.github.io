@@ -229,33 +229,22 @@ function renderWriteups() {
 function loadMarkdownContent(type, title, markdownFile) {
     // In a real implementation, you would fetch the markdown file from the server
     // For this example, we'll simulate the content
-    const markdownContent = `
-# ${title}
+    // ✅ Fetch the real markdown file from correct folder
+fetch(markdownFile)   // e.g. "projects/project1.md" or "writeups/writeup1.md"
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to load " + markdownFile);
+        }
+        return response.text();
+    })
+    .then(text => {
+        document.getElementById('markdown-content').innerHTML = marked.parse(text);
+    })
+    .catch(err => {
+        document.getElementById('markdown-content').innerHTML = 
+            `<p style="color:red;">⚠ Could not load ${markdownFile}: ${err.message}</p>`;
+    });
 
-This is a detailed ${type} about ${title}.
-
-## Overview
-This ${type} explores various aspects of cybersecurity with a focus on practical implementation and real-world scenarios.
-
-## Key Features
-- Detailed analysis of security concepts
-- Step-by-step implementation guide
-- Code examples and explanations
-- Best practices and recommendations
-
-## Technologies Used
-- Python for automation scripts
-- Various security tools and frameworks
-- Cloud security platforms
-- Network analysis tools
-
-## Conclusion
-This ${type} provides comprehensive insights into modern cybersecurity practices and how to implement them effectively.
-
-*Note: This is simulated content. In a real implementation, the actual markdown file would be loaded.*
-    `;
-    
-    document.getElementById('markdown-content').innerHTML = marked.parse(markdownContent);
     document.getElementById('github-btn').setAttribute('href', 
         type === 'project' 
             ? projects.find(p => p.title === title)?.link || '#' 
