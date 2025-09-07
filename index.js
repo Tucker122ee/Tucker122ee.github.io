@@ -1,372 +1,342 @@
-/* ============================================================
-   Duncan M Kahindi — SPA Portfolio (vanilla JS)
-   - Matrix background (toggle/paused on detail views)
-   - Simple hash router (#/home, #/projects, #/writeups, #/blog, #/contact)
-   - Markdown detail rendering via marked.parse()
-   - Accessible show/hide with aria-hidden + inert
-   ------------------------------------------------------------
-   HOW TO ADD/EDIT CONTENT:
-   1) Add/modify entries in PROJECTS and WRITEUPS arrays below.
-      - title: shown on card and detail top
-      - md: relative path to markdown file (e.g., 'projects/project12.md')
-      - git: repository URL to open in new tab (do not show raw URL in HTML)
-      - desc: short sentence for the card
-   2) Create the markdown file in /projects or /writeups with the same name.
-   3) Images referenced in markdown should live in /images (e.g., /images/project12.png).
-   ============================================================ */
-
-/* ---------- Constants & Helpers ---------- */
-
-// External URLs (hidden behind buttons to avoid raw URLs in markup)
-const URLS = {
-  gmailCompose: "https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan",
-  mailto: "mailto:duncanmaganga10@gmail.com",
-  medium: "https://medium.com/@duncanmaganga10",
-  linkedin: "https://www.linkedin.com/in/duncanmaganga10",
-  twitter: "https://twitter.com/duncanmaganga10",
-  github: "https://github.com/Duncan-Maganga"
+// Social Media URLs
+const socialUrls = {
+    linkedin: "https://www.linkedin.com/in/duncan-m-kahindi-cybersecurity/",
+    twitter: "https://twitter.com/DuncanMaganga10",
+    github: "https://github.com/Duncan-Maganga",
+    medium: "https://medium.com/@duncanmaganga10"
 };
 
-// Safe external opener (ensures target=_blank + rel=noopener noreferrer)
-function openExternal(url){
-  const a = document.createElement('a');
-  a.href = url;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  // Avoid exposing the raw URL text anywhere visible.
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-/* ---------- Metadata: Projects (50) ---------- */
-// First 4 must be exact as requested. 5–50 use placeholders.
-const PROJECTS = [
-  { id:1, title:"Phishing-Simulation-with-GoPhish", md:"projects/project1.md",  git:"https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish", desc:"Campaign design, delivery, and reporting with GoPhish." },
-  { id:2, title:"Web Application Vulnerability Assessment Report", md:"projects/project2.md",  git:"https://github.com/Duncan-Maganga/FUTURE_CS_001", desc:"Systematic web app assessment and remediation plan." },
-  { id:3, title:"Incident Response Simulation Report", md:"projects/project3.md",  git:"https://github.com/Duncan-Maganga/FUTURE_CS_02", desc:"Tabletop IR with containment and lessons learned." },
-  { id:4, title:"Secure File Sharing System", md:"projects/project4.md",  git:"https://github.com/Duncan-Maganga/FUTURE_CS_003", desc:"Encrypted sharing workflow with role-based access." },
-  // 5–50 placeholders
-  ...Array.from({length:46}, (_,i) => {
-    const n = i + 5;
-    return {
-      id:n,
-      title:`Project ${n}`,
-      md:`projects/project${n}.md`,
-      git:`https://github.com/Duncan-Maganga/project-${n}`,
-      desc:"Placeholder project — replace with a real description."
-    };
-  })
+// Project Metadata (50 projects)
+const projects = [
+    {
+        id: 1,
+        title: "Phishing Simulation with GoPhish",
+        description: "A comprehensive phishing simulation project using GoPhish to test organizational security awareness.",
+        githubUrl: "https://github.com/Duncan-Maganga/Phishing-Simulation-with-GoPhish",
+        markdownFile: "projects/project1.md"
+    },
+    {
+        id: 2,
+        title: "Web Application Vulnerability Assessment Report",
+        description: "Detailed assessment of web application vulnerabilities and recommended remediation strategies.",
+        githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_001",
+        markdownFile: "projects/project2.md"
+    },
+    {
+        id: 3,
+        title: "Incident Response Simulation Report",
+        description: "Simulated incident response exercise documenting detection, analysis, and containment procedures.",
+        githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_02",
+        markdownFile: "projects/project3.md"
+    },
+    {
+        id: 4,
+        title: "Secure File Sharing System",
+        description: "A secure system for file sharing with encryption and access control mechanisms.",
+        githubUrl: "https://github.com/Duncan-Maganga/FUTURE_CS_003",
+        markdownFile: "projects/project4.md"
+    },
+    // Projects 5-50 with placeholder data
+    ...Array.from({ length: 46 }, (_, i) => ({
+        id: i + 5,
+        title: `Project ${i + 5}`,
+        description: `Description for Project ${i + 5}. This is a placeholder project in cybersecurity.`,
+        githubUrl: `https://github.com/Duncan-Maganga/project-${i + 5}`,
+        markdownFile: `projects/project${i + 5}.md`
+    }))
 ];
 
-/* ---------- Metadata: Writeups (50) ---------- */
-// First 2 must be exact as requested. 3–50 placeholders.
-const WRITEUPS = [
-  { id:1, title:"Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters", md:"writeups/writeup1.md", git:"https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters", desc:"Explainer: SMB protocol fundamentals and security." },
-  { id:2, title:"Suricata lab demo", md:"writeups/writeup2.md", git:"https://github.com/Duncan-Maganga/Suricata", desc:"IDS rules, alerts, and packet inspection demo." },
-  // 3–50 placeholders
-  ...Array.from({length:48}, (_,i) => {
-    const n = i + 3;
-    return {
-      id:n,
-      title:`Writeup ${n}`,
-      md:`writeups/writeup${n}.md`,
-      git:`https://github.com/Duncan-Maganga/writeup-${n}`,
-      desc:"Placeholder writeup — swap in your detailed notes."
-    };
-  })
+// Writeup Metadata (50 writeups)
+const writeups = [
+    {
+        id: 1,
+        title: "Understanding SMB: What It Is, How It Works, and Why It Matters",
+        description: "An in-depth exploration of the Server Message Block protocol and its security implications.",
+        githubUrl: "https://github.com/Duncan-Maganga/Understanding-SMB-What-It-Is-How-It-Works-and-Why-It-Matters",
+        markdownFile: "writeups/writeup1.md"
+    },
+    {
+        id: 2,
+        title: "Suricata Lab Demo",
+        description: "Hands-on demonstration of Suricata IDS/IPS capabilities in a lab environment.",
+        githubUrl: "https://github.com/Duncan-Maganga/Suricata",
+        markdownFile: "writeups/writeup2.md"
+    },
+    // Writeups 3-50 with placeholder data
+    ...Array.from({ length: 48 }, (_, i) => ({
+        id: i + 3,
+        title: `Writeup ${i + 3}`,
+        description: `Description for Writeup ${i + 3}. This is a placeholder cybersecurity writeup.`,
+        githubUrl: `https://github.com/Duncan-Maganga/writeup-${i + 3}`,
+        markdownFile: `writeups/writeup${i + 3}.md`
+    }))
 ];
 
-/* ---------- DOM References ---------- */
-const views = {
-  home: document.getElementById('view-home'),
-  projects: document.getElementById('view-projects'),
-  projectDetail: document.getElementById('view-project-detail'),
-  writeups: document.getElementById('view-writeups'),
-  writeupDetail: document.getElementById('view-writeup-detail'),
-  blog: document.getElementById('view-blog'),
-  contact: document.getElementById('view-contact')
-};
-const grids = {
-  projects: document.getElementById('projectsGrid'),
-  writeups: document.getElementById('writeupsGrid')
-};
-const projectDetailEl = document.getElementById('projectDetail');
-const writeupDetailEl = document.getElementById('writeupDetail');
-const btnBackProjects = document.getElementById('btnBackProjects');
-const btnBackWriteups = document.getElementById('btnBackWriteups');
-const btnOpenProjectGit = document.getElementById('btnOpenProjectGit');
-const btnOpenWriteupGit = document.getElementById('btnOpenWriteupGit');
+// DOM Elements
 const matrixCanvas = document.getElementById('matrix');
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('.section');
+const hamburger = document.querySelector('.hamburger');
+const navMenu = document.querySelector('.nav-links');
+const projectsGrid = document.getElementById('projects-grid');
+const writeupsGrid = document.getElementById('writeups-grid');
+const markdownContent = document.getElementById('markdown-content');
+const backBtn = document.getElementById('back-btn');
+const githubBtn = document.getElementById('github-btn');
+const contactBtns = document.querySelectorAll('#contact-btn, #contact-btn-2');
+const socialLinks = document.querySelectorAll('.social-link');
 
-/* ---------- Navigation (header) ---------- */
-const menuToggle = document.getElementById('menuToggle');
-const primaryNav = document.getElementById('primaryNav');
-menuToggle.addEventListener('click', () => {
-  const open = primaryNav.classList.toggle('open');
-  menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-// Tab buttons
-document.querySelectorAll('.tablink').forEach(btn=>{
-  btn.addEventListener('click', ()=> navigate(btn.dataset.route));
-});
+// Matrix Animation
+let matrixCtx = matrixCanvas.getContext('2d');
+let matrixAnimationId = null;
+let matrixColumns = [];
+let matrixFontSize = 14;
 
-/* ---------- Social buttons (hide raw URLs) ---------- */
-document.querySelectorAll('[data-social]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const key = btn.getAttribute('data-social');
-    if (URLS[key]) openExternal(URLS[key]);
-  });
-});
-
-/* ---------- CTA Buttons ---------- */
-document.getElementById('btnEmailHome').addEventListener('click', ()=> {
-  openExternal(URLS.gmailCompose);
-});
-document.getElementById('btnBlogHome').addEventListener('click', ()=> {
-  openExternal(URLS.medium);
-});
-document.getElementById('btnEmailContact').addEventListener('click', ()=> {
-  openExternal(URLS.gmailCompose);
-});
-document.getElementById('btnMailtoFallback').addEventListener('click', ()=> {
-  openExternal(URLS.mailto);
-});
-document.getElementById('btnBlogTab').addEventListener('click', ()=> {
-  openExternal(URLS.medium);
-});
-
-/* ---------- Router ---------- */
-function navigate(hash){
-  if (!hash) hash = location.hash || '#/home';
-  if (hash === '#/blog') {
-    // Open Medium in a new tab but still show the blog CTA view.
-    openExternal(URLS.medium);
-    showView('blog');
-  } else if (hash.startsWith('#/projects/')) {
-    // Detail route: #/projects/ID
-    const id = parseInt(hash.split('/')[2], 10);
-    openProjectDetail(id);
-  } else if (hash.startsWith('#/writeups/')) {
-    const id = parseInt(hash.split('/')[2], 10);
-    openWriteupDetail(id);
-  } else if (hash === '#/projects') {
-    showView('projects');
-  } else if (hash === '#/writeups') {
-    showView('writeups');
-  } else if (hash === '#/contact') {
-    showView('contact');
-  } else {
-    showView('home');
-  }
-  // Highlight active tab
-  document.querySelectorAll('.tablink').forEach(b=>{
-    b.classList.toggle('active', b.dataset.route === hash || (hash.startsWith('#/projects/') && b.dataset.route==="#/projects") || (hash.startsWith('#/writeups/') && b.dataset.route==="#/writeups"));
-  });
-  // Close mobile nav after navigation
-  primaryNav.classList.remove('open');
-  menuToggle.setAttribute('aria-expanded','false');
+function initMatrix() {
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+    
+    // Calculate number of columns based on screen width
+    const columns = Math.floor(matrixCanvas.width / matrixFontSize);
+    matrixColumns = Array(columns).fill(0);
+    
+    // Set font
+    matrixCtx.font = `${matrixFontSize}px monospace`;
 }
 
-window.addEventListener('hashchange', ()=> navigate(location.hash));
-window.addEventListener('load', ()=> {
-  renderLists();
-  navigate(location.hash);
-});
-
-/* ---------- View Management & Accessibility ---------- */
-function setHidden(el, hidden){
-  el.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-  if (hidden) {
-    el.setAttribute('inert','');
-    el.classList.remove('active');
-  } else {
-    el.removeAttribute('inert');
-    el.classList.add('active');
-  }
-}
-
-function showView(name){
-  // List pages show matrix; detail pages hide matrix
-  const isDetail = (name === 'projectDetail' || name === 'writeupDetail');
-  toggleMatrix(!isDetail);
-
-  // Hide all, show one
-  Object.entries(views).forEach(([key, section])=>{
-    setHidden(section, key !== name);
-  });
-
-  // Focus first heading in the shown view for accessibility
-  const h2 = views[name].querySelector('h2, h1');
-  if (h2) h2.focus?.();
-}
-
-/* ---------- Render Lists ---------- */
-function renderLists(){
-  // Projects
-  grids.projects.innerHTML = '';
-  PROJECTS.forEach(p=>{
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.setAttribute('role','listitem');
-    card.innerHTML = `
-      <h3>${escapeHtml(p.title)}</h3>
-      <p>${escapeHtml(p.desc)}</p>
-      <div class="actions">
-        <button class="btn outline" data-git="${p.id}" aria-label="Open project on GitHub">Git</button>
-        <button class="btn primary" data-view="${p.id}" aria-label="View project details">View</button>
-      </div>
-    `;
-    // Bind actions without exposing raw URLs
-    card.querySelector('[data-git]').addEventListener('click', ()=> openExternal(p.git));
-    card.querySelector('[data-view]').addEventListener('click', ()=> {
-      location.hash = `#/projects/${p.id}`;
+function drawMatrix() {
+    // Semi-transparent black to create trail effect
+    matrixCtx.fillStyle = 'rgba(10, 25, 47, 0.05)';
+    matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    
+    // Set green text with varying opacity
+    matrixCtx.fillStyle = '#64ffda';
+    
+    // Draw characters
+    matrixColumns.forEach((y, index) => {
+        // Random character
+        const text = String.fromCharCode(Math.random() * 128);
+        
+        // Draw character
+        const x = index * matrixFontSize;
+        matrixCtx.fillText(text, x, y);
+        
+        // Reset column if reached bottom with random chance
+        if (y > matrixCanvas.height && Math.random() > 0.975) {
+            matrixColumns[index] = 0;
+        } else {
+            matrixColumns[index] = y + matrixFontSize;
+        }
     });
-    grids.projects.appendChild(card);
-  });
-
-  // Writeups
-  grids.writeups.innerHTML = '';
-  WRITEUPS.forEach(w=>{
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.setAttribute('role','listitem');
-    card.innerHTML = `
-      <h3>${escapeHtml(w.title)}</h3>
-      <p>${escapeHtml(w.desc)}</p>
-      <div class="actions">
-        <button class="btn outline" data-git="${w.id}" aria-label="Open writeup on GitHub">Git</button>
-        <button class="btn primary" data-view="${w.id}" aria-label="View writeup details">View</button>
-      </div>
-    `;
-    card.querySelector('[data-git]').addEventListener('click', ()=> openExternal(w.git));
-    card.querySelector('[data-view]').addEventListener('click', ()=> {
-      location.hash = `#/writeups/${w.id}`;
-    });
-    grids.writeups.appendChild(card);
-  });
 }
 
-/* ---------- Detail Views (Markdown) ---------- */
-let currentProjectGit = null;
-let currentWriteupGit = null;
-
-async function openProjectDetail(id){
-  const p = PROJECTS.find(x=>x.id===id);
-  if (!p) return showView('projects');
-  currentProjectGit = p.git;
-  btnOpenProjectGit.onclick = ()=> openExternal(currentProjectGit);
-
-  try{
-    const md = await fetch(p.md, {cache:'no-store'}).then(r=>r.text());
-    projectDetailEl.innerHTML = marked.parse(md);
-  }catch(e){
-    projectDetailEl.innerHTML = `<p>Failed to load markdown for this project. Ensure <code>${escapeHtml(p.md)}</code> exists.</p>`;
-  }
-  showView('projectDetail');
-}
-
-async function openWriteupDetail(id){
-  const w = WRITEUPS.find(x=>x.id===id);
-  if (!w) return showView('writeups');
-  currentWriteupGit = w.git;
-  btnOpenWriteupGit.onclick = ()=> openExternal(currentWriteupGit);
-
-  try{
-    const md = await fetch(w.md, {cache:'no-store'}).then(r=>r.text());
-    writeupDetailEl.innerHTML = marked.parse(md);
-  }catch(e){
-    writeupDetailEl.innerHTML = `<p>Failed to load markdown for this writeup. Ensure <code>${escapeHtml(w.md)}</code> exists.</p>`;
-  }
-  showView('writeupDetail');
-}
-
-btnBackProjects.addEventListener('click', ()=> navigate('#/projects'));
-btnBackWriteups.addEventListener('click', ()=> navigate('#/writeups'));
-
-/* ---------- Matrix Animation ---------- */
-let matrixCtx, matrixWidth, matrixHeight, matrixCols, matrixFontSize, matrixDrops, rafId=null;
-
-function initMatrix(){
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  matrixWidth = window.innerWidth;
-  matrixHeight = window.innerHeight;
-  // Responsive font size & cols
-  matrixFontSize = matrixWidth < 560 ? 12 : (matrixWidth < 960 ? 14 : 16);
-  matrixCanvas.width = matrixWidth * dpr;
-  matrixCanvas.height = matrixHeight * dpr;
-  matrixCanvas.style.width = matrixWidth + 'px';
-  matrixCanvas.style.height = matrixHeight + 'px';
-  matrixCtx = matrixCanvas.getContext('2d');
-  matrixCtx.scale(dpr, dpr);
-
-  matrixCols = Math.floor(matrixWidth / matrixFontSize);
-  matrixDrops = Array(matrixCols).fill(1 + Math.floor(Math.random()*20));
-}
-
-const matrixChars = '0123456789';
-function drawMatrix(){
-  // Fade effect
-  matrixCtx.fillStyle = 'rgba(10,25,47,0.08)';
-  matrixCtx.fillRect(0,0,matrixWidth,matrixHeight);
-
-  matrixCtx.fillStyle = '#64ffda';
-  matrixCtx.font = `${matrixFontSize}px monospace`;
-
-  for (let i=0;i<matrixDrops.length;i++){
-    const text = matrixChars[Math.floor(Math.random()*matrixChars.length)];
-    const x = i * matrixFontSize;
-    const y = matrixDrops[i] * matrixFontSize;
-    matrixCtx.fillText(text, x, y);
-
-    if (y > matrixHeight && Math.random() > 0.975) {
-      matrixDrops[i] = 0;
+function startMatrix() {
+    if (!matrixAnimationId) {
+        matrixCanvas.style.display = 'block';
+        matrixAnimation();
     }
-    matrixDrops[i]++;
-  }
-  rafId = requestAnimationFrame(drawMatrix);
 }
 
-function startMatrix(){
-  if (rafId) return;
-  initMatrix();
-  rafId = requestAnimationFrame(drawMatrix);
-}
-
-function stopMatrix(){
-  if (rafId){
-    cancelAnimationFrame(rafId);
-    rafId = null;
-  }
-}
-
-function toggleMatrix(visible){
-  // Show canvas on lists; hide on details for readability & perf
-  if (visible){
-    matrixCanvas.style.display = 'block';
-    startMatrix();
-  } else {
+function stopMatrix() {
+    if (matrixAnimationId) {
+        cancelAnimationFrame(matrixAnimationId);
+        matrixAnimationId = null;
+    }
     matrixCanvas.style.display = 'none';
-    stopMatrix();
-  }
 }
 
-window.addEventListener('resize', ()=>{
-  if (!rafId) return; // only if running
-  // Throttle: re-init after small timeout
-  clearTimeout(window.__matrixResizeTimer);
-  window.__matrixResizeTimer = setTimeout(()=> {
-    stopMatrix(); startMatrix();
-  }, 120);
-});
-
-/* ---------- Utilities ---------- */
-function escapeHtml(str){
-  return String(str)
-    .replaceAll('&','&amp;').replaceAll('<','&lt;')
-    .replaceAll('>','&gt;').replaceAll('"','&quot;')
-    .replaceAll("'","&#39;");
+function matrixAnimation() {
+    drawMatrix();
+    matrixAnimationId = requestAnimationFrame(matrixAnimation);
 }
 
+// Navigation
+function switchSection(sectionId) {
+    // Hide all sections
+    sections.forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(sectionId).classList.add('active');
+    
+    // Update active nav link
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-section') === sectionId) {
+            link.classList.add('active');
+        }
+    });
+    
+    // Handle matrix visibility
+    if (sectionId === 'detail-view') {
+        stopMatrix();
+    } else {
+        startMatrix();
+    }
+    
+    // Close mobile menu if open
+    if (navMenu.classList.contains('active')) {
+        hamburger.setAttribute('aria-expanded', 'false');
+        navMenu.classList.remove('active');
+    }
+}
+
+// Render Project Cards
+function renderProjects() {
+    projectsGrid.innerHTML = '';
+    projects.forEach(project => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h3>${project.title}</h3>
+            <p>${project.description}</p>
+            <div class="card-actions">
+                <button class="btn btn-secondary" data-github="${project.githubUrl}">Git</button>
+                <button class="btn btn-primary" data-file="${project.markdownFile}" data-github="${project.githubUrl}">View</button>
+            </div>
+        `;
+        projectsGrid.appendChild(card);
+    });
+    
+    // Add event listeners to project buttons
+    document.querySelectorAll('#projects-grid .btn').forEach(btn => {
+        if (btn.textContent === 'Git') {
+            btn.addEventListener('click', () => {
+                window.open(btn.getAttribute('data-github'), '_blank', 'noopener,noreferrer');
+            });
+        } else if (btn.textContent === 'View') {
+            btn.addEventListener('click', () => {
+                loadMarkdown(btn.getAttribute('data-file'), btn.getAttribute('data-github'));
+            });
+        }
+    });
+}
+
+// Render Writeup Cards
+function renderWriteups() {
+    writeupsGrid.innerHTML = '';
+    writeups.forEach(writeup => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h3>${writeup.title}</h3>
+            <p>${writeup.description}</p>
+            <div class="card-actions">
+                <button class="btn btn-secondary" data-github="${writeup.githubUrl}">Git</button>
+                <button class="btn btn-primary" data-file="${writeup.markdownFile}" data-github="${writeup.githubUrl}">View</button>
+            </div>
+        `;
+        writeupsGrid.appendChild(card);
+    });
+    
+    // Add event listeners to writeup buttons
+    document.querySelectorAll('#writeups-grid .btn').forEach(btn => {
+        if (btn.textContent === 'Git') {
+            btn.addEventListener('click', () => {
+                window.open(btn.getAttribute('data-github'), '_blank', 'noopener,noreferrer');
+            });
+        } else if (btn.textContent === 'View') {
+            btn.addEventListener('click', () => {
+                loadMarkdown(btn.getAttribute('data-file'), btn.getAttribute('data-github'));
+            });
+        }
+    });
+}
+
+// Load Markdown Content
+function loadMarkdown(filePath, githubUrl) {
+    fetch(filePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load ${filePath}`);
+            }
+            return response.text();
+        })
+        .then(markdown => {
+            // Parse markdown to HTML
+            markdownContent.innerHTML = marked.parse(markdown);
+            
+            // Set GitHub URL for the button
+            githubBtn.setAttribute('data-github', githubUrl);
+            
+            // Switch to detail view
+            switchSection('detail-view');
+        })
+        .catch(error => {
+            console.error('Error loading markdown:', error);
+            markdownContent.innerHTML = `
+                <div class="error">
+                    <h2>Content Not Available</h2>
+                    <p>The requested content could not be loaded. Please try again later.</p>
+                </div>
+            `;
+            switchSection('detail-view');
+        });
+}
+
+// Initialize the application
+function init() {
+    // Initialize Matrix
+    initMatrix();
+    startMatrix();
+    
+    // Render projects and writeups
+    renderProjects();
+    renderWriteups();
+    
+    // Set up navigation
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchSection(link.getAttribute('data-section'));
+        });
+    });
+    
+    // Set up hamburger menu
+    hamburger.addEventListener('click', () => {
+        const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+        hamburger.setAttribute('aria-expanded', !expanded);
+        navMenu.classList.toggle('active');
+    });
+    
+    // Set up back button
+    backBtn.addEventListener('click', () => {
+        // Determine which section to go back to based on the content type
+        const isProject = projects.some(project => 
+            project.markdownFile === githubBtn.getAttribute('data-github').includes('project')
+        );
+        switchSection(isProject ? 'projects' : 'writeups');
+    });
+    
+    // Set up GitHub button
+    githubBtn.addEventListener('click', () => {
+        window.open(githubBtn.getAttribute('data-github'), '_blank', 'noopener,noreferrer');
+    });
+    
+    // Set up contact buttons
+    contactBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            window.open('https://mail.google.com/mail/?view=cm&fs=1&to=duncanmaganga10@gmail.com&su=Hello%20Duncan', '_blank', 'noopener,noreferrer');
+        });
+    });
+    
+    // Set up social links
+    socialLinks.forEach(link => {
+        const platform = link.getAttribute('data-platform');
+        link.href = socialUrls[platform];
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open(socialUrls[platform], '_blank', 'noopener,noreferrer');
+        });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        initMatrix();
+    });
+}
+
+// Start the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);
 
